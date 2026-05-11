@@ -401,17 +401,6 @@
         });
     }
 
-    function openBurritoModal(baseItem) {
-        let selectedProtein = "asada";
-        let proteinMap = { asada: "Asada", milanesa: "Milanesa", chorizo: "Chorizo", huevo: "Huevo con Jamón" };
-        let proteinPrices = { asada: 79, milanesa: 79, chorizo: 79, huevo: 69 };
-        openWithPapasOption(baseItem, {
-            html: `<div class="option-group"><label class="option-label">Elige tu proteína</label><div class="radio-group"><label><input type="radio" name="proteina" value="asada" checked> Asada ($79)</label><label><input type="radio" name="proteina" value="milanesa"> Milanesa ($79)</label><label><input type="radio" name="proteina" value="chorizo"> Chorizo ($79)</label><label><input type="radio" name="proteina" value="huevo"> Huevo con Jamón ($69)</label></div></div>`,
-            getCustomization: () => ({ name: `Burrito de ${proteinMap[selectedProtein]}`, price: proteinPrices[selectedProtein] }),
-            init: () => { document.querySelectorAll('input[name="proteina"]').forEach(r => r.onchange = () => { selectedProtein = r.value; }); }
-        });
-    }
-
     // Brochetas - solo camarón y pollo
     function openBrochetasModal(baseItem) {
         let selectedProteina = "camaron";
@@ -448,42 +437,31 @@
         });
     }
 
-    // QUESADILLAS CORREGIDAS
-    function openQuesadillaModal(baseItem) {
-        let selectedTipo = "bistec";
-        let tipoMap = { 
-            bistec: "Bistec", 
-            arrachera: "Arrachera", 
-            chorizo: "Chorizo", 
-            campechana: "Campechana" 
-        };
-        // Precios según lo solicitado:
-        // Base 75 + Bistec (+10) = 85
-        // Arrachera (+20) = 95
-        // Chorizo (+10) = 85
-        // Campechana (+15) = 90
-        let tipoPrecio = { 
-            bistec: 85,    // 75 + 10
-            arrachera: 95, // 75 + 20
-            chorizo: 85,   // 75 + 10
-            campechana: 90 // 75 + 15
-        };
+    // NUEVA QUESADILLA SINCRONIZADA DE ARRACHERA (sin opción de proteína)
+    function openQuesadillaArracheraModal(baseItem) {
+        openWithPapasOption(baseItem, null);
+    }
+
+    // NUEVA QUESADILLA SINCRONIZADA DE POLLO (con opción de elegir tipo de pollo)
+    function openQuesadillaPolloModal(baseItem) {
+        let selectedTipoPollo = "empanizado";
+        let polloMap = { empanizado: "Empanizado", plancha: "a la Plancha" };
         openWithPapasOption(baseItem, {
-            html: `<div class="option-group"><label class="option-label">Elige tu relleno</label><div class="radio-group"><label><input type="radio" name="tipo" value="bistec" checked> Bistec (+$10) ($85)</label><label><input type="radio" name="tipo" value="arrachera"> Arrachera (+$20) ($95)</label><label><input type="radio" name="tipo" value="chorizo"> Chorizo (+$10) ($85)</label><label><input type="radio" name="tipo" value="campechana"> Campechana (+$15) ($90)</label></div></div>`,
-            getCustomization: () => ({ name: `Quesadilla de ${tipoMap[selectedTipo]}`, price: tipoPrecio[selectedTipo] }),
+            html: `<div class="option-group"><label class="option-label">Elige el tipo de pollo</label><div class="radio-group"><label><input type="radio" name="tipoPollo" value="empanizado" checked> Pollo Empanizado</label><label><input type="radio" name="tipoPollo" value="plancha"> Pollo a la Plancha</label></div></div>`,
+            getCustomization: () => ({ name: `Quesadilla Sincronizada de Pollo (${polloMap[selectedTipoPollo]}) - Grande, con pico de gallo`, price: baseItem.precio }),
             init: () => { 
-                document.querySelectorAll('input[name="tipo"]').forEach(r => r.onchange = () => { selectedTipo = r.value; });
+                document.querySelectorAll('input[name="tipoPollo"]').forEach(r => r.onchange = () => { selectedTipoPollo = r.value; });
             }
         });
     }
 
-   // Tortas (con papas)
+   // Tortas (con papas) - SE ELIMINÓ PIERNA AHUMADA
     function openTortaModal(baseItem) {
         let selectedTorta = "bistec";
-        let tortaMap = { bistec: "Bistec", milanesa_pollo: "Milanesa de pollo", choriqueso: "Choriqueso", pierna: "Pierna Ahumada", jamon: "Jamón", salchichas: "Salchichas", campechana: "Campechana", cubana: "Cubana" };
-        let tortaPrecios = { bistec: 55, milanesa_pollo: 55, choriqueso: 55, pierna: 55, jamon: 45, salchichas: 55, campechana: 55, cubana: 65 };
+        let tortaMap = { bistec: "Bistec", milanesa_pollo: "Milanesa de pollo", choriqueso: "Choriqueso", jamon: "Jamón", salchichas: "Salchichas", campechana: "Campechana", cubana: "Cubana" };
+        let tortaPrecios = { bistec: 55, milanesa_pollo: 55, choriqueso: 55, jamon: 45, salchichas: 55, campechana: 55, cubana: 65 };
         openWithPapasOption(baseItem, {
-            html: `<div class="option-group"><label class="option-label">Elige tu torta</label><div class="radio-group"><label><input type="radio" name="torta" value="bistec" checked> Bistec ($55) </label><label><input type="radio"   name="torta" value="milanesa_pollo"> Milanesa de Pollo ($55)</label><label><input type="radio"            name="torta" value="choriqueso"> Choriqueso ($55)</label><label><input type="radio" name="torta" value="pierna"> Pierna Ahumada ($55)</label><label><input type="radio" name="torta" value="jamon"> Jamón ($45)</label><label><input type="radio" name="torta" value="salchichas"> Salchichas ($55)</label><label><input type="radio" name="torta" value="campechana"> Campechana ($55)</label><label><input type="radio" name="torta" value="cubana"> Cubana ($65)</label></div></div>`,
+            html: `<div class="option-group"><label class="option-label">Elige tu torta</label><div class="radio-group"><label><input type="radio" name="torta" value="bistec" checked> Bistec ($55) </label><label><input type="radio"   name="torta" value="milanesa_pollo"> Milanesa de Pollo ($55)</label><label><input type="radio"            name="torta" value="choriqueso"> Choriqueso ($55)</label><label><input type="radio" name="torta" value="jamon"> Jamón ($45)</label><label><input type="radio" name="torta" value="salchichas"> Salchichas ($55)</label><label><input type="radio" name="torta" value="campechana"> Campechana ($55)</label><label><input type="radio" name="torta" value="cubana"> Cubana ($65)</label></div></div>`,
             getCustomization: () => ({ name: `Torta de ${tortaMap[selectedTorta]}`, price: tortaPrecios[selectedTorta] }),
             init: () => { 
                 document.querySelectorAll('input[name="torta"]').forEach(r => r.onchange = () => { selectedTorta = r.value; });
@@ -491,6 +469,18 @@
         });
     }
 
+    // Hamburguesas (solo Milanesa de Pollo y Pollo a la plancha) - SE ELIMINÓ LA DE RES
+    function openHamburguesaModal(baseItem) {
+        let selectedProteina = "milanesa";
+        let proteinaMap = { milanesa: "Milanesa de Pollo", pollo_plancha: "Pollo a la plancha" };
+        openWithPapasOption(baseItem, {
+            html: `<div class="option-group"><label class="option-label">Elige tu proteína</label><div class="radio-group"><label><input type="radio" name="proteina" value="milanesa" checked> Milanesa de Pollo</label><label><input type="radio" name="proteina" value="pollo_plancha"> Pollo a la plancha</label></div></div>`,
+            getCustomization: () => ({ name: `Hamburguesa de ${proteinaMap[selectedProteina]} - Hamburguesa, carne cacera con lechuga, tomate, cebolla, y queso.`, price: 79 }),
+            init: () => { 
+                document.querySelectorAll('input[name="proteina"]').forEach(r => r.onchange = () => { selectedProteina = r.value; });
+            }
+        });
+    }
 
     // Tiras de Pollo Frito con salsas (con papas)
     function openTirasPolloModal(baseItem) {
@@ -552,19 +542,6 @@
                 nombreFinal = nombreFinal + " - " + descBase;
                 return { name: nombreFinal, price: precioFinal };
             },
-            init: () => { 
-                document.querySelectorAll('input[name="proteina"]').forEach(r => r.onchange = () => { selectedProteina = r.value; });
-            }
-        });
-    }
-
-    // Hamburguesas con proteína (con papas)
-    function openHamburguesaModal(baseItem) {
-        let selectedProteina = "res";
-        let proteinaMap = { res: "Res", milanesa: "Milanesa de Pollo", pollo_plancha: "Pollo a la plancha" };
-        openWithPapasOption(baseItem, {
-            html: `<div class="option-group"><label class="option-label">Elige tu proteína</label><div class="radio-group"><label><input type="radio" name="proteina" value="res" checked> Res</label><label><input type="radio" name="proteina" value="milanesa"> Milanesa de Pollo</label><label><input type="radio" name="proteina" value="pollo_plancha"> Pollo a la plancha</label></div></div>`,
-            getCustomization: () => ({ name: `Hamburguesa de ${proteinaMap[selectedProteina]} - Hamburguesa, carne cacera con lechuga, tomate, cebolla, y queso.`, price: 79 }),
             init: () => { 
                 document.querySelectorAll('input[name="proteina"]').forEach(r => r.onchange = () => { selectedProteina = r.value; });
             }
@@ -855,16 +832,18 @@
         { id:"alambre", nombre:"Alambre", precio:159, desc:"Carne de res con morrón, cebolla, tocino, gratinado con queso, acompañado de puré de papa, frijoles, tortillas y salsa", img:"https://www.apega.pe/wp-content/uploads/2025/06/receta-de-alambre-mexicano-800x445.jpg.webp", categoria:"clasicos", custom:(item)=>openExtraPapasModal(item) },
         { id:"alambre_camaron", nombre:"Alambre de Camarón", precio:159, desc:"Camarones con morrón, cebolla, tocino, gratinado con queso, acompañado de puré de papa, frijoles, tortillas y salsa", img:"https://www.apega.pe/wp-content/uploads/2025/06/receta-de-alambre-mexicano-800x445.jpg.webp", categoria:"clasicos", custom:(item)=>openExtraPapasModal(item) },
         { id:"tiras_pollo", nombre:"Tiras de Pechuga de Pollo Frito", precio:139, desc:"Acompañadas de puré de papa y ensalada tipo Kentucky.", img:"https://i.ytimg.com/vi/ZWYpwkrRiC8/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLCtwP7-pZqq-OBzIThBsZZwMdBd3A", categoria:"clasicos", custom:(item)=>openTirasPolloModal(item) },
-        { id:"quesadillas", nombre:"Quesadillas", precio:75, desc:"3 quesadillas de harina, acompañadas de ensalada y salsa - Elige tu relleno", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRwE6kl0DC4Gop94POri5BJjCzDPrxzksiwpA&s", categoria:"clasicos", custom:(item)=>openQuesadillaModal(item) },
+        // NUEVAS QUESADILLAS (se reemplazan las anteriores)
+        { id:"quesadilla_arrachera", nombre:"Quesadilla de Arrachera", precio:95, desc:"Quesadilla grande tipo sincronizada, acompañada con pico de gallo.", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR2D6fCxFFcr6pVFfL0A39SlU6FKxLXgSG9bA&s", categoria:"clasicos", custom:(item)=>openQuesadillaArracheraModal(item) },
+        { id:"quesadilla_pollo", nombre:"Quesadilla de Pollo", precio:79, desc:"Quesadilla grande tipo sincronizada, acompañada con pico de gallo. Elige tipo de pollo.", img:"https://www.vvsupremo.com/wp-content/uploads/2016/07/N-Bacon-Chicken-Quesadillas-900x570.jpg", categoria:"clasicos", custom:(item)=>openQuesadillaPolloModal(item) },
         { id:"pechuga_rellena", nombre:"Pechuga Rellena", precio:159, desc:"Pechuga de pollo rellena de jamón con queso Y espinaca, bañada en crema, acompañada con puré de papa, vegetales y pan con ajo.", img:"https://i.ytimg.com/vi/S8IeMr7Rudg/maxresdefault.jpg", categoria:"clasicos", custom:(item)=>openPechugaRellenaModal(item) },
         { id:"pechuga_pollo", nombre:"Pechuga a la Plancha", precio:129, desc:"Con arroz, vegetales al vapor y pan con ajo.", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQF_z6BbHCC8XIJa7gK7tN_QfiGCWXFcKflSQ&s", categoria:"clasicos", custom:(item)=>openBBQModal(item) },
         { id:"enchiladas_suizas", nombre:"Enchiladas Suizas", precio:85, desc:"4 enchiladas rellenas de pollo y queso, gratinadas con crema y salsa verde, acompañadas de ensalada", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMcpJC4dhxcI361dSYcZ-HhcbMpDEv-c-Lzw&s", categoria:"clasicos", custom:(item)=>openWithoutPapasOption }, // SIN PAPAS
-        { id:"enchiladas_rojas", nombre:"Enchiladas Rojas Mexicanas", precio:40, desc:"5 enchiladas rojas, con lechuga, chile en vinagre, papas y zanahoria", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSYzxfbqzlPzFmRoRoWXZpLolq_Q7btqxEyyA&s", categoria:"clasicos", custom:(item)=>openEnchiladasRojasModal(item) },
-        { id:"hamburguesa", nombre:"Hamburguesa", precio:79, desc:"Hamburguesa de res o pollo con carne cacera.", img:"https://www.lavizcaina.com.mx/cdn/shop/files/ham-rees2.jpg?v=1727371844&width=1445", categoria:"clasicos", custom:(item)=>openHamburguesaModal(item) },
+        { id:"enchiladas_rojas", nombre:"Enchiladas Rojas Mexicanas", precio:40, desc:"5 enchiladas rojas, con lechuga, chile en vinagre y papas", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSYzxfbqzlPzFmRoRoWXZpLolq_Q7btqxEyyA&s", categoria:"clasicos", custom:(item)=>openEnchiladasRojasModal(item) },
+        { id:"hamburguesa", nombre:"Hamburguesa", precio:79, desc:"Hamburguesa de pollo.", img:"https://comedera.com/wp-content/uploads/sites/9/2023/07/Hamburguesa-de-pollo-picante.jpg", categoria:"clasicos", custom:(item)=>openHamburguesaModal(item) },
        
         { id:"chilaquiles_verdes", nombre:"Chilaquiles Especiales (Verdes)", precio:95, desc:"Bien cargados, Elige tu Proteina, Bañados en Frijoles Enchipotlados, Gratinados con Queso, Crema, Con aguacate, Cebolla y Cilantro", img:"https://scontent.fqro3-1.fna.fbcdn.net/v/t39.30808-6/656452293_1607518970350983_3048921546084326662_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=7b2446&_nc_eui2=AeGtonwa6_p0fHKuZY6U0eLV8rCGy9Ia0pfysIbL0hrSl7HNN4q1G_2hLPNytizJxOWyguRy3Wdz_sAiF4NxdZ7N&_nc_ohc=Lo1ePRLPcbAQ7kNvwGTaeG4&_nc_oc=AdrHQx7TAkDWeiUfhO8Oh12em3DaCv_25qYoefQIPJI1hv1EgBiKPrRSvE1fHk0cvo0&_nc_zt=23&_nc_ht=scontent.fqro3-1.fna&_nc_gid=S2qaT9uESHSorQ1DJM4KCg&_nc_ss=7a3a8&oh=00_Af27rCrFtMXXo96OwsCwteFNaLnsQCHsWvZguPCFku5xfA&oe=69E83912", categoria:"desayunos", custom:(item)=>openChilaquilesModal(item, true) },
         { id:"chilaquiles_rojos", nombre:"Chilaquiles Especiales (Rojos)", precio:95, desc:"Bien cargados, Elige tu Proteina, Bañados en Frijoles Enchipotlados, Gratinados con Queso, Crema, Con aguacate, Cebolla y Cilantro", img:"https://scontent.fqro3-1.fna.fbcdn.net/v/t39.30808-6/656452293_1607518970350983_3048921546084326662_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=7b2446&_nc_eui2=AeGtonwa6_p0fHKuZY6U0eLV8rCGy9Ia0pfysIbL0hrSl7HNN4q1G_2hLPNytizJxOWyguRy3Wdz_sAiF4NxdZ7N&_nc_ohc=Lo1ePRLPcbAQ7kNvwGTaeG4&_nc_oc=AdrHQx7TAkDWeiUfhO8Oh12em3DaCv_25qYoefQIPJI1hv1EgBiKPrRSvE1fHk0cvo0&_nc_zt=23&_nc_ht=scontent.fqro3-1.fna&_nc_gid=S2qaT9uESHSorQ1DJM4KCg&_nc_ss=7a3a8&oh=00_Af27rCrFtMXXo96OwsCwteFNaLnsQCHsWvZguPCFku5xfA&oe=69E83912", categoria:"desayunos", custom:(item)=>openChilaquilesModal(item, false) },
-        { id:"burrito", nombre:"Super Burrito", precio:79, desc:"Burrito relleno de frijoles, jitomate, cebolla, aguacate, queso y tu proteina. Acompañado de salsa", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRE09R7Pr2T6jP-VM6dNrqpKPdGlsUqWl4gA&s", categoria:"desayunos", custom:(item)=>openBurritoModal(item) },
+        // BURRITO ELIMINADO
         { id:"huevos_gusto", nombre:"Huevos al Gusto", precio:65, desc:"Elige tu estilo, acompañados con frijoles en chipotle, una rebanada de queso panela, salsa y tortillas.", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5XN3JJB8lJKrTDkLJEpiLd1IL_FlE0xEKSQ&s", categoria:"desayunos", custom:(item)=>openHuevosModal(item) },
         { id:"coctel_tropical", nombre:"Coctel de Frutas", precio:50, desc:"Melón, papaya, manzana, fresas - Elige topping", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZ_lT_0skxR0WBLqUkRmMBmgOjnlHl5SGjlQ&s", categoria:"desayunos", custom:(item)=>openCoctelTropicalModal(item) },
         { id:"coctel_fresco", nombre:"Coctel de Frutas Fresco", precio:50, desc:"Sandía, piña, jícama, pepino - Elige sazón", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTtFUOZe8j8mTgBkgVuytR_SW4Hy4Iv3xBzw&s", categoria:"desayunos", custom:(item)=>openCoctelFrescoModal(item) },
@@ -889,7 +868,7 @@
         { id:"coctel_camaron", nombre:"Coctel de Camarón", precio:130, desc:"Camarones frescos con salsa cocktail, acompañado de galletas saladas", img:"https://pinaenlacocina.com/wp-content/uploads/2014/01/IMG_20180422_165323.jpg", categoria:"mariscos", custom:(item)=>openCoctelModal(item) },
         // TACOS
         { id:"tacos", nombre:"Tacos", precio:0, desc:"Elige tus tacos y complementos. Acompañados de cebolla asada", img:"https://cdn.nutritionstudies.org/wp-content/uploads/2023/03/chipotle-mushroom-tacos-1024x683.jpg", categoria:"tacos", custom:(item)=>openTacosModal() },
-        // TORTAS (con papas)
+        // TORTAS (con papas) - PIERNA AHUMADA ELIMINADA
         { id:"tortas", nombre:"Torta", precio:55, desc:"Elige tu torta.", img:"https://www.unileverfoodsolutions.com.mx/dam/global-ufs/mcos/NOLA/calcmenu/recipes/MX-recipes/torta-cubana/torta.jpg", categoria:"tortas", custom:(item)=>openTortaModal(item) },
         // ACOMPAÑAMIENTOS
         { id:"papas_fritas", nombre:"Papas Fritas", precio:50, desc:"Crujientes papas a la francesa", img:"https://images.unsplash.com/photo-1630384060421-cb20d0e0649d?w=300&h=200&fit=crop", categoria:"otros" },
