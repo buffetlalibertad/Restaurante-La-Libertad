@@ -1,2 +1,2 @@
 # Buffet-LaLibertad
-Buffet La Libertad
+Restaurante La Libertad
