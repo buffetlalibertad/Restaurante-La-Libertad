@@ -151,6 +151,14 @@
         .credits-footer p { margin: 5px 0; }
         .credits-footer .heart { color: #d46b2e; }
         .credits-footer strong { color: #ffffff; font-weight: 500; }
+        
+        .contact-sales { background: #0c0c0c; border-radius: 28px; padding: 24px; margin: 30px 0 20px; border: 1px solid #d46b2e; text-align: center; }
+        .contact-sales h3 { color: #d46b2e; font-weight: 700; margin-bottom: 12px; font-size: 1.2rem; }
+        .contact-sales p { font-size: 0.8rem; margin: 8px 0; color: #ccc; }
+        .contact-sales a { color: #d46b2e; text-decoration: none; font-weight: 600; }
+        .contact-sales .contact-icons { display: flex; justify-content: center; gap: 20px; margin-top: 15px; flex-wrap: wrap; }
+        .contact-sales .contact-icons a { background: #1a1a1a; padding: 10px 18px; border-radius: 40px; display: inline-flex; align-items: center; gap: 8px; font-size: 0.8rem; border: 0.5px solid #333; transition: 0.2s; }
+        .contact-sales .contact-icons a:hover { background: #d46b2e; color: #000; border-color: #d46b2e; }
     </style>
 </head>
 <body>
@@ -179,6 +187,7 @@
         <button class="section-btn" data-section="tacos">Tacos</button>
         <button class="section-btn" data-section="tortas">Tortas</button>
         <button class="section-btn" data-section="ensaladas">Ensaladas</button>
+        <button class="section-btn" data-section="postres">Postres</button>
         <button class="section-btn" data-section="otros">Acompañamientos</button>
         <button class="section-btn" data-section="bebidas">Bebidas</button>
     </div>
@@ -190,6 +199,7 @@
     <div id="seccionTacos" class="category-block"><div class="category-title">Tacos</div><div class="dishes-grid" id="gridTacos"></div></div>
     <div id="seccionTortas" class="category-block"><div class="category-title">Tortas</div><div class="dishes-grid" id="gridTortas"></div></div>
     <div id="seccionEnsaladas" class="category-block"><div class="category-title">Ensalada Personalizada</div><div class="dishes-grid" id="gridEnsaladas"></div></div>
+    <div id="seccionPostres" class="category-block"><div class="category-title">Postres</div><div class="dishes-grid" id="gridPostres"></div></div>
     <div id="seccionOtros" class="category-block"><div class="category-title">Acompañamientos</div><div class="dishes-grid" id="gridOtros"></div></div>
     <div id="seccionBebidas" class="category-block"><div class="category-title">Bebidas</div><div class="dishes-grid" id="gridBebidas"></div></div>
 
@@ -212,6 +222,17 @@
             <p>Lunes a Domingo de 9:30 AM - 4:30 PM.</p>
             <p style="color:#ff6b6b;">Te esperamos.</p>
         </div>
+    </div>
+    
+    <!-- SECCION DE CONTACTO PARA VENDER PAGINAS WEB -->
+    <div class="contact-sales">
+        <h3>Tu negocio necesita una pagina web?</h3>
+        <p>Diseño profesional como esta, adaptado a tu marca.</p>
+        <div class="contact-icons">
+            <a href="https://wa.me/524131012498" target="_blank"><i class="fab fa-whatsapp"></i> 413 101 2498</a>
+            <a href="mailto:juarezvegabrandon96@gmail.com"><i class="fas fa-envelope"></i> juarezvegabrandon96@gmail.com</a>
+        </div>
+        <p style="font-size: 0.7rem; margin-top: 12px;">Lleva tu negocio al siguiente nivel</p>
     </div>
     
     <div class="credits-footer">
@@ -255,7 +276,7 @@
     function loadCart() { const stored = localStorage.getItem("libertad_cart_final"); if(stored) { try { cart = JSON.parse(stored); } catch(e){ cart=[]; } } else cart = []; updateAllUI(); }
     function addToCartCustom(item) { cart.push(item); saveCart(); updateAllUI(); }
     function updateQuantity(id, delta) { const idx = cart.findIndex(i => i.id === id); if(idx !== -1) { const newCant = cart[idx].cantidad + delta; if(newCant <= 0) cart.splice(idx,1); else cart[idx].cantidad = newCant; saveCart(); updateAllUI(); } }
-    function clearCartTotal() { if(cart.length === 0) return; if(confirm("¿Eliminar todos los platillos del carrito?")) { cart = []; saveCart(); updateAllUI(); if(modalOpen) renderModalCart(); } }
+    function clearCartTotal() { if(cart.length === 0) return; if(confirm("Eliminar todos los platillos del carrito?")) { cart = []; saveCart(); updateAllUI(); if(modalOpen) renderModalCart(); } }
     function removeItem(id) { cart = cart.filter(i => i.id !== id); saveCart(); updateAllUI(); }
     let modalOpen = false;
     function updateAllUI() { updateFloatingBar(); if(modalOpen) renderModalCart(); applySearchFilter(); }
@@ -275,12 +296,14 @@
         if(cart.length === 0) { alert("Agrega productos al carrito"); return null; }
         
         let total = 0, detalleItems = ""; 
-        cart.forEach((item,index)=>{ const subt=item.precio*item.cantidad; total+=subt; detalleItems+=`${index+1}• ${item.cantidad} x ${item.nombre} → $${item.precio} c/u = $${subt}\n`; }); 
+        cart.forEach((item,index)=>{ const subt=item.precio*item.cantidad; total+=subt; detalleItems+=`${index+1}. ${item.cantidad} x ${item.nombre} → $${item.precio} c/u = $${subt}\n`; }); 
         
         let direccionTexto = tipoPedido === "domicilio" ? `Dirección: ${domicilio}\nReferencia: ${referencia || "Sin especificar"}` : "Recoger en local (sin envío)";
-        let notasTexto = notas ? `\n\n NOTAS:\n${notas}` : "";
+        let notasTexto = notas ? `\n\nNOTAS:\n${notas}` : "";
         
-        const mensaje = ` *BUFFET LA LIBERTAD - NUEVO PEDIDO* \n\n━━━━━━━━━━━━━━━━━━━━\n DATOS DEL CLIENTE\n━━━━━━━━━━━━━━━━━━━━\nNombre: ${nombre}\nTeléfono: ${telefono}\nTipo de pedido: ${tipoPedido === "domicilio" ? "Envío a domicilio" : "Recoger en local"}\n${direccionTexto}\n\n━━━━━━━━━━━━━━━━━━━━\nDETALLE DEL PEDIDO\n━━━━━━━━━━━━━━━━━━━━\n${detalleItems}\n━━━━━━━━━━━━━━━━━━━━\n TOTAL A PAGAR: $${total} MXN${notasTexto}`; 
+        const mensaje = `*RESTAURANTE LA LIBERTAD - NUEVO PEDIDO*\n\n______________________________________________________________________________________________________________________________\nDATOS DEL CLIENTE\n___________________________________________________________________________________________________________________________\nNombre: ${nombre}\nTeléfono: ${telefono}\nTipo de pedido: ${tipoPedido === "domicilio" ? "Envío a domicilio" : "Recoger en local"}\n${direccionTexto}\n\n____________________________________________________________________________________________________________________________\nDETALLE DEL PEDIDO\n____________________________________________________________________________________________________________________________\n${detalleItems}\n____________________________________________________________________________________________________________________________________\nTOTAL A PAGAR: $${total} MXN${notasTexto}
+\n\n_________________________________________________________________________________________________________________________________\n
+        \n\n_________________________________________________________________________________________________________________________________\n¿NEGOCIO? ¡TENGO LA SOLUCIÓN!\n_________________________________________________________________________________________________________________________________\nDiseño de páginas web para negocios\nComo esta, adaptada a tu marca\nWhatsApp: 413 101 2498\nCorreo: juarezvegabrandon96@gmail.com`; 
         return encodeURIComponent(mensaje); 
     }
     
@@ -306,19 +329,65 @@
     }
     
     function scrollToSection(sectionId){ 
-        const names={clasicos:"seccionClasicos",desayunos:"seccionDesayunos",pastas:"seccionPastas",mariscos:"seccionMariscos",tacos:"seccionTacos",tortas:"seccionTortas",ensaladas:"seccionEnsaladas",otros:"seccionOtros",bebidas:"seccionBebidas"}; 
+        const names={clasicos:"seccionClasicos",desayunos:"seccionDesayunos",pastas:"seccionPastas",mariscos:"seccionMariscos",tacos:"seccionTacos",tortas:"seccionTortas",ensaladas:"seccionEnsaladas",postres:"seccionPostres",otros:"seccionOtros",bebidas:"seccionBebidas"}; 
         const el = document.getElementById(names[sectionId]); 
         if(el) el.scrollIntoView({behavior:'smooth',block:'start'}); 
     }
 
-    // Función para agregar sin papas (para los platillos que no llevan opción de papas)
+    // ========== FUNCIONES ==========
+    
+    // Funcion para agregar directo (sin opciones)
+    function openSimpleModal(baseItem) {
+        const modalContent = document.getElementById("customizeModalContent");
+        modalContent.innerHTML = `
+            <div class="modal-header"><h2>${baseItem.nombre}</h2><button class="close-modal" id="closeCustomModal">&times;</button></div>
+            <div class="price-preview" id="pricePreview">Total: $${baseItem.precio}</div>
+            <button class="btn-confirm" id="confirmBtn"><i class="fas fa-check"></i> Agregar al carrito</button>
+        `;
+        document.getElementById("customizeModal").classList.add("active");
+        document.getElementById("closeCustomModal").onclick = () => document.getElementById("customizeModal").classList.remove("active");
+        
+        document.getElementById("confirmBtn").onclick = () => {
+            addToCartCustom({ id: baseItem.id + "_" + Date.now(), nombre: baseItem.nombre + " - " + baseItem.desc, precio: baseItem.precio, cantidad: 1 });
+            document.getElementById("customizeModal").classList.remove("active");
+        };
+    }
+    
+    // Funcion con papas extra
+    function openWithPapasOption(baseItem) {
+        let hasExtra = false;
+        let descripcionBase = baseItem.desc || "";
+        const modalContent = document.getElementById("customizeModalContent");
+        let innerHtml = `<div class="modal-header"><h2>${baseItem.nombre}</h2><button class="close-modal" id="closeCustomModal">&times;</button></div>`;
+        innerHtml += `<div class="option-group"><label class="option-label">Agregar papas extra</label><div class="radio-group"><label><input type="radio" name="papas" value="no" checked> Sin papas</label><label><input type="radio" name="papas" value="si"> Papas extra (+$30)</label></div></div>`;
+        innerHtml += `<div class="price-preview" id="pricePreview">Total: $${baseItem.precio}</div><button class="btn-confirm" id="confirmBtn"><i class="fas fa-check"></i> Agregar al carrito</button>`;
+        modalContent.innerHTML = innerHtml;
+        document.getElementById("customizeModal").classList.add("active");
+        document.getElementById("closeCustomModal").onclick = () => document.getElementById("customizeModal").classList.remove("active");
+        
+        const radios = document.querySelectorAll('input[name="papas"]');
+        const priceSpan = document.getElementById("pricePreview");
+        let basePrice = baseItem.precio;
+        
+        radios.forEach(r => r.onchange = () => { hasExtra = r.value === "si"; priceSpan.innerText = `Total: $${basePrice + (hasExtra ? 30 : 0)}`; });
+        
+        document.getElementById("confirmBtn").onclick = () => {
+            let finalPrice = basePrice + (hasExtra ? 30 : 0);
+            let finalName = baseItem.nombre + (hasExtra ? " + Papas Extra" : "");
+            if (descripcionBase && !finalName.includes(descripcionBase.substring(0,30))) {
+                finalName = finalName + " - " + descripcionBase;
+            }
+            addToCartCustom({ id: baseItem.id + "_" + Date.now(), nombre: finalName, precio: finalPrice, cantidad: 1 });
+            document.getElementById("customizeModal").classList.remove("active");
+        };
+    }
+    
+    // Funcion para agregar sin papas (con opciones personalizadas)
     function openWithoutPapasOption(baseItem, customConfig = null) {
         let descripcionBase = baseItem.desc || "";
         const modalContent = document.getElementById("customizeModalContent");
         let innerHtml = `<div class="modal-header"><h2>${baseItem.nombre}</h2><button class="close-modal" id="closeCustomModal">&times;</button></div>`;
-        if (customConfig) { 
-            innerHtml += customConfig.html; 
-        }
+        if (customConfig) { innerHtml += customConfig.html; }
         innerHtml += `<div class="price-preview" id="pricePreview">Total: $${baseItem.precio}</div><button class="btn-confirm" id="confirmBtn"><i class="fas fa-check"></i> Agregar al carrito</button>`;
         modalContent.innerHTML = innerHtml;
         document.getElementById("customizeModal").classList.add("active");
@@ -343,34 +412,92 @@
         };
         if (customConfig && customConfig.init) customConfig.init();
     }
-
-    // Función con papas extra (para platillos que sí llevan esa opción)
-    function openWithPapasOption(baseItem, customConfig = null) {
-        let hasExtra = false;
+    
+    // Funcion para desayunos con papas extra y bebida caliente
+    function openBreakfastWithOptions(baseItem, customConfig = null) {
+        let hasExtraPapas = false;
+        let hasExtraDrink = false;
+        let selectedDrink = "cafe";
         let descripcionBase = baseItem.desc || "";
         const modalContent = document.getElementById("customizeModalContent");
         let innerHtml = `<div class="modal-header"><h2>${baseItem.nombre}</h2><button class="close-modal" id="closeCustomModal">&times;</button></div>`;
-        if (customConfig) { innerHtml += customConfig.html; innerHtml += `<div class="option-group" style="margin-top:16px;"><label class="option-label">¿Agregar papas extra?</label><div class="radio-group"><label><input type="radio" name="papas" value="no" checked> Sin papas</label><label><input type="radio" name="papas" value="si"> Papas extra (+$30)</label></div></div>`; }
-        else { innerHtml += `<div class="option-group"><label class="option-label">¿Agregar papas extra?</label><div class="radio-group"><label><input type="radio" name="papas" value="no" checked> Sin papas</label><label><input type="radio" name="papas" value="si"> Papas extra (+$30)</label></div></div>`; }
+        
+        if (customConfig) { innerHtml += customConfig.html; }
+        
+        // Papas extra (si aplica)
+        const noPapasItems = ["sandwich_clasico", "sandwich_3quesos", "big_sandwich", "huevos_americanos", "hot_cakes"];
+        if (!noPapasItems.includes(baseItem.id)) {
+            innerHtml += `<div class="option-group"><label class="option-label">Agregar papas extra</label><div class="radio-group"><label><input type="radio" name="papas" value="no" checked> Sin papas</label><label><input type="radio" name="papas" value="si"> Papas extra (+$30)</label></div></div>`;
+        }
+        
+        // Bebida caliente extra
+        const noDrinkItems = ["menudo", "coctel_tropical", "coctel_fresco", "hot_cakes"];
+        if (!noDrinkItems.includes(baseItem.id)) {
+            innerHtml += `<div class="option-group" style="margin-top:16px; border-top:0.5px solid #2a2a2a; padding-top:16px;">
+                <label class="option-label">Agregar bebida caliente (+$25)</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="extraDrink" value="no" checked> Sin bebida extra</label>
+                    <label><input type="radio" name="extraDrink" value="cafe"> Café Nescafé (+$25)</label>
+                    <label><input type="radio" name="extraDrink" value="chocolate"> Chocolate Caliente (+$25)</label>
+                </div>
+                <div style="font-size:0.65rem; color:#d46b2e; margin-top:6px;">Ahorra $15 comparado con comprarlo aparte</div>
+            </div>`;
+        }
+        
         innerHtml += `<div class="price-preview" id="pricePreview">Total: $${baseItem.precio}</div><button class="btn-confirm" id="confirmBtn"><i class="fas fa-check"></i> Agregar al carrito</button>`;
         modalContent.innerHTML = innerHtml;
         document.getElementById("customizeModal").classList.add("active");
         document.getElementById("closeCustomModal").onclick = () => document.getElementById("customizeModal").classList.remove("active");
         
-        const radios = document.querySelectorAll('input[name="papas"]');
         const priceSpan = document.getElementById("pricePreview");
         let basePrice = baseItem.precio;
         
-        radios.forEach(r => r.onchange = () => { hasExtra = r.value === "si"; priceSpan.innerText = `Total: $${basePrice + (hasExtra ? 30 : 0)}`; });
+        const papasRadios = document.querySelectorAll('input[name="papas"]');
+        const drinkRadios = document.querySelectorAll('input[name="extraDrink"]');
+        
+        const updatePrice = () => {
+            let total = basePrice;
+            if (papasRadios.length) {
+                const papasSelected = document.querySelector('input[name="papas"]:checked');
+                if (papasSelected && papasSelected.value === "si") total += 30;
+            }
+            if (drinkRadios.length) {
+                const drinkSelected = document.querySelector('input[name="extraDrink"]:checked');
+                if (drinkSelected && drinkSelected.value !== "no") total += 25;
+            }
+            priceSpan.innerText = `Total: $${total}`;
+        };
+        
+        papasRadios.forEach(r => r.onchange = updatePrice);
+        drinkRadios.forEach(r => r.onchange = () => { 
+            hasExtraDrink = r.value !== "no"; 
+            selectedDrink = r.value;
+            updatePrice();
+        });
         
         document.getElementById("confirmBtn").onclick = () => {
-            let finalPrice = basePrice + (hasExtra ? 30 : 0);
-            let finalName = baseItem.nombre + (hasExtra ? " + Papas Extra" : "");
+            let finalPrice = basePrice;
+            let hasPapas = false;
+            if (papasRadios.length) {
+                const papasSelected = document.querySelector('input[name="papas"]:checked');
+                hasPapas = papasSelected && papasSelected.value === "si";
+                if (hasPapas) finalPrice += 30;
+            }
+            if (drinkRadios.length) {
+                const drinkSelected = document.querySelector('input[name="extraDrink"]:checked');
+                hasExtraDrink = drinkSelected && drinkSelected.value !== "no";
+                if (hasExtraDrink) finalPrice += 25;
+            }
+            
+            let finalName = baseItem.nombre;
+            if (hasPapas) finalName += " + Papas Extra";
+            if (hasExtraDrink) finalName += ` + ${selectedDrink === "cafe" ? "Café Nescafé" : "Chocolate Caliente"}`;
+            
             if (customConfig && customConfig.getCustomization) { 
                 const customResult = customConfig.getCustomization(); 
                 if (customResult && customResult.name) { 
-                    finalName = customResult.name + (hasExtra ? " + Papas Extra" : ""); 
-                    finalPrice = customResult.price + (hasExtra ? 30 : 0); 
+                    finalName = customResult.name + (hasPapas ? " + Papas Extra" : "") + (hasExtraDrink ? ` + ${selectedDrink === "cafe" ? "Café Nescafé" : "Chocolate Caliente"}` : ""); 
+                    finalPrice = customResult.price + (hasPapas ? 30 : 0) + (hasExtraDrink ? 25 : 0);
                 } 
             }
             if (descripcionBase && !finalName.includes(descripcionBase.substring(0,30))) {
@@ -380,509 +507,850 @@
             document.getElementById("customizeModal").classList.remove("active");
         };
         if (customConfig && customConfig.init) customConfig.init();
+        updatePrice();
     }
 
+    // Funcion para chilaquiles con proteina y bebida caliente
+    function openChilaquilesWithOptions(baseItem, esVerde) {
+        let selectedProteina = "ninguna";
+        let hasExtraDrink = false;
+        let selectedDrink = "cafe";
+        let proteinaMap = { arrachera: "Arrachera +$30", pollo_empanizado: "Pollo empanizado +$15", pollo_plancha: "Pollo a la plancha +$15", huevo: "Huevo +$15" };
+        let proteinaPrecio = { arrachera: 30, pollo_empanizado: 15, pollo_plancha: 15, huevo: 15 };
+        let nombreBase = esVerde ? "Chilaquiles Verdes" : "Chilaquiles Rojos";
+        let descripcionBase = baseItem.desc || "";
+        
+        const modalContent = document.getElementById("customizeModalContent");
+        let innerHtml = `<div class="modal-header"><h2>${baseItem.nombre}</h2><button class="close-modal" id="closeCustomModal">&times;</button></div>`;
+        innerHtml += `<div class="option-group"><label class="option-label">Elige tu proteina (opcional)</label><div class="radio-group"><label><input type="radio" name="proteina" value="ninguna" checked> Sin proteina</label><label><input type="radio" name="proteina" value="arrachera"> Arrachera (+$30)</label><label><input type="radio" name="proteina" value="pollo_empanizado"> Pollo empanizado (+$15)</label><label><input type="radio" name="proteina" value="pollo_plancha"> Pollo a la plancha (+$15)</label><label><input type="radio" name="proteina" value="huevo"> Huevo (+$15)</label></div></div>`;
+        innerHtml += `<div class="option-group" style="margin-top:16px; border-top:0.5px solid #2a2a2a; padding-top:16px;">
+            <label class="option-label">Agregar bebida caliente (+$25)</label>
+            <div class="radio-group">
+                <label><input type="radio" name="extraDrink" value="no" checked> Sin bebida extra</label>
+                <label><input type="radio" name="extraDrink" value="cafe"> Café Nescafé (+$25)</label>
+                <label><input type="radio" name="extraDrink" value="chocolate"> Chocolate Caliente (+$25)</label>
+            </div>
+            <div style="font-size:0.65rem; color:#d46b2e; margin-top:6px;">Ahorra $15 comparado con comprarlo aparte</div>
+        </div>`;
+        innerHtml += `<div class="price-preview" id="pricePreview">Total: $${baseItem.precio}</div><button class="btn-confirm" id="confirmBtn"><i class="fas fa-check"></i> Agregar al carrito</button>`;
+        modalContent.innerHTML = innerHtml;
+        document.getElementById("customizeModal").classList.add("active");
+        document.getElementById("closeCustomModal").onclick = () => document.getElementById("customizeModal").classList.remove("active");
+        
+        const priceSpan = document.getElementById("pricePreview");
+        let basePrice = 95;
+        
+        const proteinaRadios = document.querySelectorAll('input[name="proteina"]');
+        const drinkRadios = document.querySelectorAll('input[name="extraDrink"]');
+        
+        const updatePrice = () => {
+            let total = basePrice;
+            const proteinaSelected = document.querySelector('input[name="proteina"]:checked');
+            if (proteinaSelected && proteinaSelected.value !== "ninguna") {
+                total += proteinaPrecio[proteinaSelected.value];
+            }
+            const drinkSelected = document.querySelector('input[name="extraDrink"]:checked');
+            if (drinkSelected && drinkSelected.value !== "no") total += 25;
+            priceSpan.innerText = `Total: $${total}`;
+        };
+        
+        proteinaRadios.forEach(r => r.onchange = () => { selectedProteina = r.value; updatePrice(); });
+        drinkRadios.forEach(r => r.onchange = () => { hasExtraDrink = r.value !== "no"; selectedDrink = r.value; updatePrice(); });
+        
+        document.getElementById("confirmBtn").onclick = () => {
+            let finalPrice = basePrice;
+            let proteinaExtra = false;
+            const proteinaSelected = document.querySelector('input[name="proteina"]:checked');
+            if (proteinaSelected && proteinaSelected.value !== "ninguna") {
+                finalPrice += proteinaPrecio[proteinaSelected.value];
+                proteinaExtra = true;
+            }
+            const drinkSelected = document.querySelector('input[name="extraDrink"]:checked');
+            hasExtraDrink = drinkSelected && drinkSelected.value !== "no";
+            if (hasExtraDrink) finalPrice += 25;
+            
+            let finalName = nombreBase;
+            if (proteinaExtra) {
+                finalName = `${nombreBase} con ${proteinaMap[selectedProteina]}`;
+            }
+            if (hasExtraDrink) {
+                finalName += ` + ${selectedDrink === "cafe" ? "Café Nescafé" : "Chocolate Caliente"}`;
+            }
+            if (descripcionBase && !finalName.includes(descripcionBase.substring(0,30))) {
+                finalName = finalName + " - " + descripcionBase;
+            }
+            addToCartCustom({ id: baseItem.id + "_" + Date.now(), nombre: finalName, precio: finalPrice, cantidad: 1 });
+            document.getElementById("customizeModal").classList.remove("active");
+        };
+        updatePrice();
+    }
+
+    // Papas al horno con relleno
     function openPapasRellenoModal(baseItem) {
         let selectedRelleno = "Fajitas de Res";
-        openWithPapasOption(baseItem, {
-            html: `<div class="option-group"><label class="option-label">Elige tu relleno</label><div class="radio-group"><label><input type="radio" name="relleno" value="Fajitas de Res" checked> Fajitas de Res</label><label><input type="radio" name="relleno" value="Camarón"> Camarón</label></div></div>`,
-            getCustomization: () => ({ name: `Papas al Horno (Relleno: ${selectedRelleno})`, price: baseItem.precio }),
-            init: () => { document.querySelectorAll('input[name="relleno"]').forEach(r => r.onchange = () => { selectedRelleno = r.value; }); }
-        });
+        let descripcionBase = baseItem.desc || "";
+        const modalContent = document.getElementById("customizeModalContent");
+        let innerHtml = `<div class="modal-header"><h2>${baseItem.nombre}</h2><button class="close-modal" id="closeCustomModal">&times;</button></div>`;
+        innerHtml += `<div class="option-group"><label class="option-label">Elige tu relleno</label><div class="radio-group"><label><input type="radio" name="relleno" value="Fajitas de Res" checked> Fajitas de Res</label><label><input type="radio" name="relleno" value="Camaron"> Camaron</label></div></div>`;
+        innerHtml += `<div class="option-group"><label class="option-label">Agregar papas extra</label><div class="radio-group"><label><input type="radio" name="papas" value="no" checked> Sin papas</label><label><input type="radio" name="papas" value="si"> Papas extra (+$30)</label></div></div>`;
+        innerHtml += `<div class="price-preview" id="pricePreview">Total: $${baseItem.precio}</div><button class="btn-confirm" id="confirmBtn"><i class="fas fa-check"></i> Agregar al carrito</button>`;
+        modalContent.innerHTML = innerHtml;
+        document.getElementById("customizeModal").classList.add("active");
+        document.getElementById("closeCustomModal").onclick = () => document.getElementById("customizeModal").classList.remove("active");
+        
+        let hasExtraPapas = false;
+        let basePrice = baseItem.precio;
+        const priceSpan = document.getElementById("pricePreview");
+        const papasRadios = document.querySelectorAll('input[name="papas"]');
+        const rellenoRadios = document.querySelectorAll('input[name="relleno"]');
+        
+        const updatePrice = () => {
+            let total = basePrice;
+            const papasSelected = document.querySelector('input[name="papas"]:checked');
+            if (papasSelected && papasSelected.value === "si") total += 30;
+            priceSpan.innerText = `Total: $${total}`;
+        };
+        
+        papasRadios.forEach(r => r.onchange = () => { hasExtraPapas = r.value === "si"; updatePrice(); });
+        rellenoRadios.forEach(r => r.onchange = () => { selectedRelleno = r.value; });
+        
+        document.getElementById("confirmBtn").onclick = () => {
+            let finalPrice = basePrice + (hasExtraPapas ? 30 : 0);
+            let finalName = `Papas al Horno (Relleno: ${selectedRelleno})` + (hasExtraPapas ? " + Papas Extra" : "");
+            if (descripcionBase && !finalName.includes(descripcionBase.substring(0,30))) {
+                finalName = finalName + " - " + descripcionBase;
+            }
+            addToCartCustom({ id: baseItem.id + "_" + Date.now(), nombre: finalName, precio: finalPrice, cantidad: 1 });
+            document.getElementById("customizeModal").classList.remove("active");
+        };
+        updatePrice();
     }
 
+    // Pechuga a la plancha con BBQ
     function openBBQModal(baseItem) {
         let hasBBQ = false;
-        openWithPapasOption(baseItem, {
-            html: `<div class="option-group"><label class="option-label">Salsa BBQ (Gratis)</label><div class="radio-group"><label><input type="radio" name="bbq" value="no" checked> Sin BBQ</label><label><input type="radio" name="bbq" value="si"> Con BBQ</label></div></div>`,
-            getCustomization: () => ({ name: `Pechuga de Pollo a la Plancha${hasBBQ ? " + BBQ" : ""}`, price: baseItem.precio }),
-            init: () => { document.querySelectorAll('input[name="bbq"]').forEach(r => r.onchange = () => { hasBBQ = r.value === "si"; }); }
-        });
-    }
-
-    // Brochetas - solo camarón y pollo
-    function openBrochetasModal(baseItem) {
-        let selectedProteina = "camaron";
-        let proteinMap = { camaron: "Camarón", pollo: "Pollo" };
-        openWithPapasOption(baseItem, {
-            html: `<div class="option-group"><label class="option-label">Elige tu proteína</label><div class="radio-group"><label><input type="radio" name="proteina" value="camaron" checked> Camarón ($99)</label><label><input type="radio" name="proteina" value="pollo"> Pollo ($99)</label></div></div>`,
-            getCustomization: () => ({ name: `Brochetas de ${proteinMap[selectedProteina]}`, price: 99 }),
-            init: () => { 
-                document.querySelectorAll('input[name="proteina"]').forEach(r => r.onchange = () => { selectedProteina = r.value; });
+        let hasExtraPapas = false;
+        let descripcionBase = baseItem.desc || "";
+        const modalContent = document.getElementById("customizeModalContent");
+        let innerHtml = `<div class="modal-header"><h2>${baseItem.nombre}</h2><button class="close-modal" id="closeCustomModal">&times;</button></div>`;
+        innerHtml += `<div class="option-group"><label class="option-label">Salsa BBQ (Gratis)</label><div class="radio-group"><label><input type="radio" name="bbq" value="no" checked> Sin BBQ</label><label><input type="radio" name="bbq" value="si"> Con BBQ</label></div></div>`;
+        innerHtml += `<div class="option-group"><label class="option-label">Agregar papas extra</label><div class="radio-group"><label><input type="radio" name="papas" value="no" checked> Sin papas</label><label><input type="radio" name="papas" value="si"> Papas extra (+$30)</label></div></div>`;
+        innerHtml += `<div class="price-preview" id="pricePreview">Total: $${baseItem.precio}</div><button class="btn-confirm" id="confirmBtn"><i class="fas fa-check"></i> Agregar al carrito</button>`;
+        modalContent.innerHTML = innerHtml;
+        document.getElementById("customizeModal").classList.add("active");
+        document.getElementById("closeCustomModal").onclick = () => document.getElementById("customizeModal").classList.remove("active");
+        
+        let basePrice = baseItem.precio;
+        const priceSpan = document.getElementById("pricePreview");
+        const bbqRadios = document.querySelectorAll('input[name="bbq"]');
+        const papasRadios = document.querySelectorAll('input[name="papas"]');
+        
+        const updatePrice = () => {
+            let total = basePrice;
+            if (hasExtraPapas) total += 30;
+            priceSpan.innerText = `Total: $${total}`;
+        };
+        
+        bbqRadios.forEach(r => r.onchange = () => { hasBBQ = r.value === "si"; });
+        papasRadios.forEach(r => r.onchange = () => { hasExtraPapas = r.value === "si"; updatePrice(); });
+        
+        document.getElementById("confirmBtn").onclick = () => {
+            let finalPrice = basePrice + (hasExtraPapas ? 30 : 0);
+            let finalName = `Pechuga de Pollo a la Plancha${hasBBQ ? " + BBQ" : ""}` + (hasExtraPapas ? " + Papas Extra" : "");
+            if (descripcionBase && !finalName.includes(descripcionBase.substring(0,30))) {
+                finalName = finalName + " - " + descripcionBase;
             }
-        });
+            addToCartCustom({ id: baseItem.id + "_" + Date.now(), nombre: finalName, precio: finalPrice, cantidad: 1 });
+            document.getElementById("customizeModal").classList.remove("active");
+        };
+        updatePrice();
     }
 
+    // Alitas con salsa
+    function openAlitasModal(baseItem) {
+        let selectedSalsa = "naturales";
+        let hasExtraPapas = false;
+        let salsaMap = { naturales: "Naturales", bbq: "Salsa BBQ", buffalo: "Salsa Buffalo" };
+        let descripcionBase = baseItem.desc || "";
+        const modalContent = document.getElementById("customizeModalContent");
+        let innerHtml = `<div class="modal-header"><h2>${baseItem.nombre}</h2><button class="close-modal" id="closeCustomModal">&times;</button></div>`;
+        innerHtml += `<div class="option-group"><label class="option-label">Elige tu salsa</label><div class="radio-group"><label><input type="radio" name="salsa" value="naturales" checked> Naturales</label><label><input type="radio" name="salsa" value="bbq"> Salsa BBQ</label><label><input type="radio" name="salsa" value="buffalo"> Salsa Buffalo</label></div></div>`;
+        innerHtml += `<div class="option-group"><label class="option-label">Agregar papas extra</label><div class="radio-group"><label><input type="radio" name="papas" value="no" checked> Sin papas</label><label><input type="radio" name="papas" value="si"> Papas extra (+$30)</label></div></div>`;
+        innerHtml += `<div class="price-preview" id="pricePreview">Total: $${baseItem.precio}</div><button class="btn-confirm" id="confirmBtn"><i class="fas fa-check"></i> Agregar al carrito</button>`;
+        modalContent.innerHTML = innerHtml;
+        document.getElementById("customizeModal").classList.add("active");
+        document.getElementById("closeCustomModal").onclick = () => document.getElementById("customizeModal").classList.remove("active");
+        
+        let basePrice = baseItem.precio;
+        const priceSpan = document.getElementById("pricePreview");
+        const salsaRadios = document.querySelectorAll('input[name="salsa"]');
+        const papasRadios = document.querySelectorAll('input[name="papas"]');
+        
+        salsaRadios.forEach(r => r.onchange = () => { selectedSalsa = r.value; });
+        papasRadios.forEach(r => r.onchange = () => { hasExtraPapas = r.value === "si"; priceSpan.innerText = `Total: $${basePrice + (hasExtraPapas ? 30 : 0)}`; });
+        
+        document.getElementById("confirmBtn").onclick = () => {
+            let finalPrice = basePrice + (hasExtraPapas ? 30 : 0);
+            let finalName = `Alitas - ${salsaMap[selectedSalsa]}` + (hasExtraPapas ? " + Papas Extra" : "");
+            if (descripcionBase && !finalName.includes(descripcionBase.substring(0,30))) {
+                finalName = finalName + " - " + descripcionBase;
+            }
+            addToCartCustom({ id: baseItem.id + "_" + Date.now(), nombre: finalName, precio: finalPrice, cantidad: 1 });
+            document.getElementById("customizeModal").classList.remove("active");
+        };
+    }
+
+    // Tiras de Pollo con salsa
+    function openTirasPolloModal(baseItem) {
+        let selectedSalsa = "naturales";
+        let hasExtraPapas = false;
+        let salsaMap = { naturales: "Naturales", bbq: "Salsa BBQ", buffalo: "Salsa Buffalo" };
+        let descripcionBase = baseItem.desc || "";
+        const modalContent = document.getElementById("customizeModalContent");
+        let innerHtml = `<div class="modal-header"><h2>${baseItem.nombre}</h2><button class="close-modal" id="closeCustomModal">&times;</button></div>`;
+        innerHtml += `<div class="option-group"><label class="option-label">Elige tu salsa</label><div class="radio-group"><label><input type="radio" name="salsa" value="naturales" checked> Naturales</label><label><input type="radio" name="salsa" value="bbq"> Salsa BBQ</label><label><input type="radio" name="salsa" value="buffalo"> Salsa Buffalo</label></div></div>`;
+        innerHtml += `<div class="option-group"><label class="option-label">Agregar papas extra</label><div class="radio-group"><label><input type="radio" name="papas" value="no" checked> Sin papas</label><label><input type="radio" name="papas" value="si"> Papas extra (+$30)</label></div></div>`;
+        innerHtml += `<div class="price-preview" id="pricePreview">Total: $${baseItem.precio}</div><button class="btn-confirm" id="confirmBtn"><i class="fas fa-check"></i> Agregar al carrito</button>`;
+        modalContent.innerHTML = innerHtml;
+        document.getElementById("customizeModal").classList.add("active");
+        document.getElementById("closeCustomModal").onclick = () => document.getElementById("customizeModal").classList.remove("active");
+        
+        let basePrice = baseItem.precio;
+        const priceSpan = document.getElementById("pricePreview");
+        const salsaRadios = document.querySelectorAll('input[name="salsa"]');
+        const papasRadios = document.querySelectorAll('input[name="papas"]');
+        
+        salsaRadios.forEach(r => r.onchange = () => { selectedSalsa = r.value; });
+        papasRadios.forEach(r => r.onchange = () => { hasExtraPapas = r.value === "si"; priceSpan.innerText = `Total: $${basePrice + (hasExtraPapas ? 30 : 0)}`; });
+        
+        document.getElementById("confirmBtn").onclick = () => {
+            let finalPrice = basePrice + (hasExtraPapas ? 30 : 0);
+            let finalName = `Tiras de Pechuga de Pollo Frito - ${salsaMap[selectedSalsa]}` + (hasExtraPapas ? " + Papas Extra" : "");
+            if (descripcionBase && !finalName.includes(descripcionBase.substring(0,30))) {
+                finalName = finalName + " - " + descripcionBase;
+            }
+            addToCartCustom({ id: baseItem.id + "_" + Date.now(), nombre: finalName, precio: finalPrice, cantidad: 1 });
+            document.getElementById("customizeModal").classList.remove("active");
+        };
+    }
+
+    // Hamburguesa con selector de proteina
+    function openHamburguesaModal(baseItem) {
+        let selectedProteina = "milanesa";
+        let hasExtraPapas = false;
+        let proteinaMap = { milanesa: "Milanesa de Pollo", pollo_plancha: "Pollo a la plancha" };
+        let descripcionBase = baseItem.desc || "";
+        const modalContent = document.getElementById("customizeModalContent");
+        let innerHtml = `<div class="modal-header"><h2>${baseItem.nombre}</h2><button class="close-modal" id="closeCustomModal">&times;</button></div>`;
+        innerHtml += `<div class="option-group"><label class="option-label">Elige tu proteina</label><div class="radio-group"><label><input type="radio" name="proteina" value="milanesa" checked> Milanesa de Pollo</label><label><input type="radio" name="proteina" value="pollo_plancha"> Pollo a la plancha</label></div></div>`;
+        innerHtml += `<div class="option-group"><label class="option-label">Agregar papas extra</label><div class="radio-group"><label><input type="radio" name="papas" value="no" checked> Sin papas</label><label><input type="radio" name="papas" value="si"> Papas extra (+$30)</label></div></div>`;
+        innerHtml += `<div class="price-preview" id="pricePreview">Total: $${baseItem.precio}</div><button class="btn-confirm" id="confirmBtn"><i class="fas fa-check"></i> Agregar al carrito</button>`;
+        modalContent.innerHTML = innerHtml;
+        document.getElementById("customizeModal").classList.add("active");
+        document.getElementById("closeCustomModal").onclick = () => document.getElementById("customizeModal").classList.remove("active");
+        
+        let basePrice = baseItem.precio;
+        const priceSpan = document.getElementById("pricePreview");
+        const proteinaRadios = document.querySelectorAll('input[name="proteina"]');
+        const papasRadios = document.querySelectorAll('input[name="papas"]');
+        
+        proteinaRadios.forEach(r => r.onchange = () => { selectedProteina = r.value; });
+        papasRadios.forEach(r => r.onchange = () => { hasExtraPapas = r.value === "si"; priceSpan.innerText = `Total: $${basePrice + (hasExtraPapas ? 30 : 0)}`; });
+        
+        document.getElementById("confirmBtn").onclick = () => {
+            let finalPrice = basePrice + (hasExtraPapas ? 30 : 0);
+            let finalName = `Hamburguesa de ${proteinaMap[selectedProteina]}` + (hasExtraPapas ? " + Papas Extra" : "");
+            if (descripcionBase && !finalName.includes(descripcionBase.substring(0,30))) {
+                finalName = finalName + " - " + descripcionBase;
+            }
+            addToCartCustom({ id: baseItem.id + "_" + Date.now(), nombre: finalName, precio: finalPrice, cantidad: 1 });
+            document.getElementById("customizeModal").classList.remove("active");
+        };
+    }
+
+    // Quesadilla de Arrachera
+    function openQuesadillaArracheraModal(baseItem) {
+        let hasExtraPapas = false;
+        let descripcionBase = baseItem.desc || "";
+        const modalContent = document.getElementById("customizeModalContent");
+        let innerHtml = `<div class="modal-header"><h2>${baseItem.nombre}</h2><button class="close-modal" id="closeCustomModal">&times;</button></div>`;
+        innerHtml += `<div class="option-group"><label class="option-label">Agregar papas extra</label><div class="radio-group"><label><input type="radio" name="papas" value="no" checked> Sin papas</label><label><input type="radio" name="papas" value="si"> Papas extra (+$30)</label></div></div>`;
+        innerHtml += `<div class="price-preview" id="pricePreview">Total: $${baseItem.precio}</div><button class="btn-confirm" id="confirmBtn"><i class="fas fa-check"></i> Agregar al carrito</button>`;
+        modalContent.innerHTML = innerHtml;
+        document.getElementById("customizeModal").classList.add("active");
+        document.getElementById("closeCustomModal").onclick = () => document.getElementById("customizeModal").classList.remove("active");
+        
+        let basePrice = baseItem.precio;
+        const priceSpan = document.getElementById("pricePreview");
+        const papasRadios = document.querySelectorAll('input[name="papas"]');
+        
+        papasRadios.forEach(r => r.onchange = () => { hasExtraPapas = r.value === "si"; priceSpan.innerText = `Total: $${basePrice + (hasExtraPapas ? 30 : 0)}`; });
+        
+        document.getElementById("confirmBtn").onclick = () => {
+            let finalPrice = basePrice + (hasExtraPapas ? 30 : 0);
+            let finalName = baseItem.nombre + (hasExtraPapas ? " + Papas Extra" : "");
+            if (descripcionBase && !finalName.includes(descripcionBase.substring(0,30))) {
+                finalName = finalName + " - " + descripcionBase;
+            }
+            addToCartCustom({ id: baseItem.id + "_" + Date.now(), nombre: finalName, precio: finalPrice, cantidad: 1 });
+            document.getElementById("customizeModal").classList.remove("active");
+        };
+    }
+
+    // Quesadilla de Pollo con tipo
+    function openQuesadillaPolloModal(baseItem) {
+        let selectedTipoPollo = "empanizado";
+        let hasExtraPapas = false;
+        let polloMap = { empanizado: "Empanizado", plancha: "a la Plancha" };
+        let descripcionBase = baseItem.desc || "";
+        const modalContent = document.getElementById("customizeModalContent");
+        let innerHtml = `<div class="modal-header"><h2>${baseItem.nombre}</h2><button class="close-modal" id="closeCustomModal">&times;</button></div>`;
+        innerHtml += `<div class="option-group"><label class="option-label">Elige el tipo de pollo</label><div class="radio-group"><label><input type="radio" name="tipoPollo" value="empanizado" checked> Pollo Empanizado</label><label><input type="radio" name="tipoPollo" value="plancha"> Pollo a la Plancha</label></div></div>`;
+        innerHtml += `<div class="option-group"><label class="option-label">Agregar papas extra</label><div class="radio-group"><label><input type="radio" name="papas" value="no" checked> Sin papas</label><label><input type="radio" name="papas" value="si"> Papas extra (+$30)</label></div></div>`;
+        innerHtml += `<div class="price-preview" id="pricePreview">Total: $${baseItem.precio}</div><button class="btn-confirm" id="confirmBtn"><i class="fas fa-check"></i> Agregar al carrito</button>`;
+        modalContent.innerHTML = innerHtml;
+        document.getElementById("customizeModal").classList.add("active");
+        document.getElementById("closeCustomModal").onclick = () => document.getElementById("customizeModal").classList.remove("active");
+        
+        let basePrice = baseItem.precio;
+        const priceSpan = document.getElementById("pricePreview");
+        const tipoRadios = document.querySelectorAll('input[name="tipoPollo"]');
+        const papasRadios = document.querySelectorAll('input[name="papas"]');
+        
+        tipoRadios.forEach(r => r.onchange = () => { selectedTipoPollo = r.value; });
+        papasRadios.forEach(r => r.onchange = () => { hasExtraPapas = r.value === "si"; priceSpan.innerText = `Total: $${basePrice + (hasExtraPapas ? 30 : 0)}`; });
+        
+        document.getElementById("confirmBtn").onclick = () => {
+            let finalPrice = basePrice + (hasExtraPapas ? 30 : 0);
+            let finalName = `Quesadilla Sincronizada de Pollo (${polloMap[selectedTipoPollo]})` + (hasExtraPapas ? " + Papas Extra" : "");
+            if (descripcionBase && !finalName.includes(descripcionBase.substring(0,30))) {
+                finalName = finalName + " - " + descripcionBase;
+            }
+            addToCartCustom({ id: baseItem.id + "_" + Date.now(), nombre: finalName, precio: finalPrice, cantidad: 1 });
+            document.getElementById("customizeModal").classList.remove("active");
+        };
+    }
+
+    // Tortas con selector
+    function openTortaModal(baseItem) {
+        let selectedTorta = "bistec";
+        let hasExtraPapas = false;
+        let tortaMap = { bistec: "Bistec", milanesa_pollo: "Milanesa de pollo", choriqueso: "Choriqueso", jamon: "Jamon", salchichas: "Salchichas", campechana: "Campechana", cubana: "Cubana" };
+        let tortaPrecios = { bistec: 55, milanesa_pollo: 55, choriqueso: 55, jamon: 45, salchichas: 55, campechana: 55, cubana: 65 };
+        let descripcionBase = baseItem.desc || "";
+        const modalContent = document.getElementById("customizeModalContent");
+        let innerHtml = `<div class="modal-header"><h2>${baseItem.nombre}</h2><button class="close-modal" id="closeCustomModal">&times;</button></div>`;
+        innerHtml += `<div class="option-group"><label class="option-label">Elige tu torta</label><div class="radio-group"><label><input type="radio" name="torta" value="bistec" checked> Bistec ($55) </label><label><input type="radio" name="torta" value="milanesa_pollo"> Milanesa de Pollo ($55)</label><label><input type="radio" name="torta" value="choriqueso"> Choriqueso ($55)</label><label><input type="radio" name="torta" value="jamon"> Jamon ($45)</label><label><input type="radio" name="torta" value="salchichas"> Salchichas ($55)</label><label><input type="radio" name="torta" value="campechana"> Campechana ($55)</label><label><input type="radio" name="torta" value="cubana"> Cubana ($65)</label></div></div>`;
+        innerHtml += `<div class="option-group"><label class="option-label">Agregar papas extra</label><div class="radio-group"><label><input type="radio" name="papas" value="no" checked> Sin papas</label><label><input type="radio" name="papas" value="si"> Papas extra (+$30)</label></div></div>`;
+        innerHtml += `<div class="price-preview" id="pricePreview">Total: $${tortaPrecios[selectedTorta]}</div><button class="btn-confirm" id="confirmBtn"><i class="fas fa-check"></i> Agregar al carrito</button>`;
+        modalContent.innerHTML = innerHtml;
+        document.getElementById("customizeModal").classList.add("active");
+        document.getElementById("closeCustomModal").onclick = () => document.getElementById("customizeModal").classList.remove("active");
+        
+        const priceSpan = document.getElementById("pricePreview");
+        const tortaRadios = document.querySelectorAll('input[name="torta"]');
+        const papasRadios = document.querySelectorAll('input[name="papas"]');
+        
+        const updatePrice = () => {
+            let baseP = tortaPrecios[selectedTorta];
+            let total = baseP + (hasExtraPapas ? 30 : 0);
+            priceSpan.innerText = `Total: $${total}`;
+        };
+        
+        tortaRadios.forEach(r => r.onchange = () => { selectedTorta = r.value; updatePrice(); });
+        papasRadios.forEach(r => r.onchange = () => { hasExtraPapas = r.value === "si"; updatePrice(); });
+        
+        document.getElementById("confirmBtn").onclick = () => {
+            let finalPrice = tortaPrecios[selectedTorta] + (hasExtraPapas ? 30 : 0);
+            let finalName = `Torta de ${tortaMap[selectedTorta]}` + (hasExtraPapas ? " + Papas Extra" : "");
+            if (descripcionBase && !finalName.includes(descripcionBase.substring(0,30))) {
+                finalName = finalName + " - " + descripcionBase;
+            }
+            addToCartCustom({ id: baseItem.id + "_" + Date.now(), nombre: finalName, precio: finalPrice, cantidad: 1 });
+            document.getElementById("customizeModal").classList.remove("active");
+        };
+        updatePrice();
+    }
+
+    // Huevos al gusto con estilo
     function openHuevosModal(baseItem) {
         let selectedEstilo = "estrellados";
-        let estiloMap = { estrellados: "Estrellados", revueltos: "Revueltos", mexicanos: "A la Mexicana", con_jamon: "Con Jamón", rancheros: "Rancheros" };
-        openWithPapasOption(baseItem, {
-            html: `<div class="option-group"><label class="option-label">Elige tu estilo</label><div class="radio-group"><label><input type="radio" name="estilo" value="estrellados" checked> Estrellados</label><label><input type="radio" name="estilo" value="revueltos"> Revueltos</label><label><input type="radio" name="estilo" value="mexicanos"> A la Mexicana</label><label><input type="radio" name="estilo" value="con_jamon"> Con Jamón</label><label><input type="radio" name="estilo" value="rancheros"> Rancheros</label></div></div>`,
+        let estiloMap = { estrellados: "Estrellados", revueltos: "Revueltos", mexicanos: "A la Mexicana", con_jamon: "Con Jamon", rancheros: "Rancheros" };
+        openBreakfastWithOptions(baseItem, {
+            html: `<div class="option-group"><label class="option-label">Elige tu estilo</label><div class="radio-group"><label><input type="radio" name="estilo" value="estrellados" checked> Estrellados</label><label><input type="radio" name="estilo" value="revueltos"> Revueltos</label><label><input type="radio" name="estilo" value="mexicanos"> A la Mexicana</label><label><input type="radio" name="estilo" value="con_jamon"> Con Jamon</label><label><input type="radio" name="estilo" value="rancheros"> Rancheros</label></div></div>`,
             getCustomization: () => ({ name: `Huevos ${estiloMap[selectedEstilo]}`, price: 65 }),
             init: () => { document.querySelectorAll('input[name="estilo"]').forEach(r => r.onchange = () => { selectedEstilo = r.value; }); }
         });
     }
 
-    // Alitas con salsa (con papas)
-    function openAlitasModal(baseItem) {
-        let selectedSalsa = "naturales";
-        let salsaMap = { naturales: "Naturales", bbq: "Salsa BBQ", buffalo: "Salsa Búfalo" };
-        openWithPapasOption(baseItem, {
-            html: `<div class="option-group"><label class="option-label">Elige tu salsa</label><div class="radio-group"><label><input type="radio" name="salsa" value="naturales" checked> Naturales</label><label><input type="radio" name="salsa" value="bbq"> Salsa BBQ</label><label><input type="radio" name="salsa" value="buffalo"> Salsa Búfalo</label></div></div>`,
-            getCustomization: () => ({ name: `Alitas - ${salsaMap[selectedSalsa]}`, price: baseItem.precio }),
-            init: () => { 
-                document.querySelectorAll('input[name="salsa"]').forEach(r => r.onchange = () => { selectedSalsa = r.value; });
-            }
-        });
-    }
-
-    // NUEVA QUESADILLA SINCRONIZADA DE ARRACHERA (sin opción de proteína)
-    function openQuesadillaArracheraModal(baseItem) {
-        openWithPapasOption(baseItem, null);
-    }
-
-    // NUEVA QUESADILLA SINCRONIZADA DE POLLO (con opción de elegir tipo de pollo)
-    function openQuesadillaPolloModal(baseItem) {
-        let selectedTipoPollo = "empanizado";
-        let polloMap = { empanizado: "Empanizado", plancha: "a la Plancha" };
-        openWithPapasOption(baseItem, {
-            html: `<div class="option-group"><label class="option-label">Elige el tipo de pollo</label><div class="radio-group"><label><input type="radio" name="tipoPollo" value="empanizado" checked> Pollo Empanizado</label><label><input type="radio" name="tipoPollo" value="plancha"> Pollo a la Plancha</label></div></div>`,
-            getCustomization: () => ({ name: `Quesadilla Sincronizada de Pollo (${polloMap[selectedTipoPollo]}) - Grande, con pico de gallo`, price: baseItem.precio }),
-            init: () => { 
-                document.querySelectorAll('input[name="tipoPollo"]').forEach(r => r.onchange = () => { selectedTipoPollo = r.value; });
-            }
-        });
-    }
-
-   // Tortas (con papas) - SE ELIMINÓ PIERNA AHUMADA
-    function openTortaModal(baseItem) {
-        let selectedTorta = "bistec";
-        let tortaMap = { bistec: "Bistec", milanesa_pollo: "Milanesa de pollo", choriqueso: "Choriqueso", jamon: "Jamón", salchichas: "Salchichas", campechana: "Campechana", cubana: "Cubana" };
-        let tortaPrecios = { bistec: 55, milanesa_pollo: 55, choriqueso: 55, jamon: 45, salchichas: 55, campechana: 55, cubana: 65 };
-        openWithPapasOption(baseItem, {
-            html: `<div class="option-group"><label class="option-label">Elige tu torta</label><div class="radio-group"><label><input type="radio" name="torta" value="bistec" checked> Bistec ($55) </label><label><input type="radio"   name="torta" value="milanesa_pollo"> Milanesa de Pollo ($55)</label><label><input type="radio"            name="torta" value="choriqueso"> Choriqueso ($55)</label><label><input type="radio" name="torta" value="jamon"> Jamón ($45)</label><label><input type="radio" name="torta" value="salchichas"> Salchichas ($55)</label><label><input type="radio" name="torta" value="campechana"> Campechana ($55)</label><label><input type="radio" name="torta" value="cubana"> Cubana ($65)</label></div></div>`,
-            getCustomization: () => ({ name: `Torta de ${tortaMap[selectedTorta]}`, price: tortaPrecios[selectedTorta] }),
-            init: () => { 
-                document.querySelectorAll('input[name="torta"]').forEach(r => r.onchange = () => { selectedTorta = r.value; });
-            }
-        });
-    }
-
-    // Hamburguesas (solo Milanesa de Pollo y Pollo a la plancha) - SE ELIMINÓ LA DE RES
-    function openHamburguesaModal(baseItem) {
-        let selectedProteina = "milanesa";
-        let proteinaMap = { milanesa: "Milanesa de Pollo", pollo_plancha: "Pollo a la plancha" };
-        openWithPapasOption(baseItem, {
-            html: `<div class="option-group"><label class="option-label">Elige tu proteína</label><div class="radio-group"><label><input type="radio" name="proteina" value="milanesa" checked> Milanesa de Pollo</label><label><input type="radio" name="proteina" value="pollo_plancha"> Pollo a la plancha</label></div></div>`,
-            getCustomization: () => ({ name: `Hamburguesa de ${proteinaMap[selectedProteina]} - Hamburguesa, carne cacera con lechuga, tomate, cebolla, y queso.`, price: 79 }),
-            init: () => { 
-                document.querySelectorAll('input[name="proteina"]').forEach(r => r.onchange = () => { selectedProteina = r.value; });
-            }
-        });
-    }
-
-    // Tiras de Pollo Frito con salsas (con papas)
-    function openTirasPolloModal(baseItem) {
-        let selectedSalsa = "naturales";
-        let salsaMap = { naturales: "Naturales", bbq: "Salsa BBQ", buffalo: "Salsa Búfalo" };
-        openWithPapasOption(baseItem, {
-            html: `<div class="option-group"><label class="option-label">Elige tu salsa</label><div class="radio-group"><label><input type="radio" name="salsa" value="naturales" checked> Naturales</label><label><input type="radio" name="salsa" value="bbq"> Salsa BBQ</label><label><input type="radio" name="salsa" value="buffalo"> Salsa Búfalo</label></div></div>`,
-            getCustomization: () => ({ name: `Tiras de Pechuga de Pollo Frito - ${salsaMap[selectedSalsa]} - Acompañadas de puré de papa y ensalada tipo Kentucky`, price: baseItem.precio }),
-            init: () => { 
-                document.querySelectorAll('input[name="salsa"]').forEach(r => r.onchange = () => { selectedSalsa = r.value; });
-            }
-        });
-    }
-
-    // Coctel de Frutas Tropical (sin papas)
-    function openCoctelTropicalModal(baseItem) {
-        let selectedTopping = "sola";
-        let toppingMap = { sola: "Sola", miel: "Con Miel", coco: "Con Coco Rallado", yogurt: "Con Yogurt con Granola" };
-        openWithoutPapasOption(baseItem, {
-            html: `<div class="option-group"><label class="option-label">Elige tu topping</label><div class="radio-group"><label><input type="radio" name="topping" value="sola" checked> Sola</label><label><input type="radio" name="topping" value="miel"> Con Miel</label><label><input type="radio" name="topping" value="coco"> Con Coco Rallado</label><label><input type="radio" name="topping" value="yogurt"> Con Yogurt con Granola</label></div></div>`,
-            getCustomization: () => ({ name: `Coctel de Frutas Tropical (Melón, papaya, manzana, fresas) - ${toppingMap[selectedTopping]}`, price: baseItem.precio }),
-            init: () => { 
-                document.querySelectorAll('input[name="topping"]').forEach(r => r.onchange = () => { selectedTopping = r.value; });
-            }
-        });
-    }
-
-    // Coctel de Frutas Fresco (sin papas)
-    function openCoctelFrescoModal(baseItem) {
-        let selectedSazon = "sola";
-        let sazonMap = { sola: "Sola", chamoy: "Con Chamoy", tajin: "Con Chile Tajín", molido: "Con Chile Molido" };
-        openWithoutPapasOption(baseItem, {
-            html: `<div class="option-group"><label class="option-label">Elige tu sazón</label><div class="radio-group"><label><input type="radio" name="sazon" value="sola" checked> Sola</label><label><input type="radio" name="sazon" value="chamoy"> Con Chamoy</label><label><input type="radio" name="sazon" value="tajin"> Con Chile Tajín</label><label><input type="radio" name="sazon" value="molido"> Con Chile Molido</label></div></div>`,
-            getCustomization: () => ({ name: `Coctel de Frutas Fresco (Sandía, piña, jícama, pepino) - ${sazonMap[selectedSazon]}`, price: baseItem.precio }),
-            init: () => { 
-                document.querySelectorAll('input[name="sazon"]').forEach(r => r.onchange = () => { selectedSazon = r.value; });
-            }
-        });
-    }
-
-    // Chilaquiles con proteína (sin papas)
-    function openChilaquilesModal(baseItem, esVerde) {
-        let selectedProteina = "ninguna";
-        let proteinaMap = { arrachera: "Arrachera +$30", pollo_empanizado: "Pollo empanizado +$15", pollo_plancha: "Pollo a la plancha +$15", huevo: "Huevo +$15" };
-        let proteinaPrecio = { arrachera: 30, pollo_empanizado: 15, pollo_plancha: 15, huevo: 15 };
-        let nombreBase = esVerde ? "Chilaquiles Verdes" : "Chilaquiles Rojos";
-        let descBase = baseItem.desc || "Bien cargados, bañados en frijoles enchipotlados, gratinados con queso, crema, aguacate, cebolla y cilantro";
-        
-        openWithoutPapasOption(baseItem, {
-            html: `<div class="option-group"><label class="option-label">Elige tu proteína (opcional)</label><div class="radio-group"><label><input type="radio" name="proteina" value="ninguna" checked> Sin proteína</label><label><input type="radio" name="proteina" value="arrachera"> Arrachera (+$30)</label><label><input type="radio" name="proteina" value="pollo_empanizado"> Pollo empanizado (+$15)</label><label><input type="radio" name="proteina" value="pollo_plancha"> Pollo a la plancha (+$15)</label><label><input type="radio" name="proteina" value="huevo"> Huevo (+$15)</label></div></div>`,
-            getCustomization: () => {
-                let precioFinal = 95;
-                let nombreFinal = nombreBase;
-                if (selectedProteina !== "ninguna") {
-                    precioFinal += proteinaPrecio[selectedProteina];
-                    let proteinaNombre = proteinaMap[selectedProteina];
-                    nombreFinal = `${nombreBase} con ${proteinaNombre}`;
-                }
-                nombreFinal = nombreFinal + " - " + descBase;
-                return { name: nombreFinal, price: precioFinal };
-            },
-            init: () => { 
-                document.querySelectorAll('input[name="proteina"]').forEach(r => r.onchange = () => { selectedProteina = r.value; });
-            }
-        });
-    }
-
-    // Pechuga Rellena con selección de crema (sin papas)
+    // Pechuga rellena con crema
     function openPechugaRellenaModal(baseItem) {
         let selectedCrema = "elote";
-        let cremaMap = { elote: "Crema de Elote", chipotle: "Crema de Chipotle", champinon: "Crema de Champiñón", poblano: "Crema de Poblano" };
-        openWithoutPapasOption(baseItem, {
-            html: `<div class="option-group"><label class="option-label">Elige el tipo de crema</label><div class="radio-group"><label><input type="radio" name="crema" value="elote" checked> Crema de Elote</label><label><input type="radio" name="crema" value="chipotle"> Crema de Chipotle</label><label><input type="radio" name="crema" value="champinon"> Crema de Champiñón</label><label><input type="radio" name="crema" value="poblano"> Crema de Poblano</label></div></div>`,
-            getCustomization: () => ({ name: `Pechuga Rellena (Rellena de jamón con queso) - ${cremaMap[selectedCrema]}`, price: baseItem.precio }),
-            init: () => { 
-                document.querySelectorAll('input[name="crema"]').forEach(r => r.onchange = () => { selectedCrema = r.value; });
+        let cremaMap = { elote: "Crema de Elote", chipotle: "Crema de Chipotle", champinon: "Crema de Champinon", poblano: "Crema de Poblano" };
+        let descripcionBase = baseItem.desc || "";
+        const modalContent = document.getElementById("customizeModalContent");
+        let innerHtml = `<div class="modal-header"><h2>${baseItem.nombre}</h2><button class="close-modal" id="closeCustomModal">&times;</button></div>`;
+        innerHtml += `<div class="option-group"><label class="option-label">Elige el tipo de crema</label><div class="radio-group"><label><input type="radio" name="crema" value="elote" checked> Crema de Elote</label><label><input type="radio" name="crema" value="chipotle"> Crema de Chipotle</label><label><input type="radio" name="crema" value="champinon"> Crema de Champinon</label><label><input type="radio" name="crema" value="poblano"> Crema de Poblano</label></div></div>`;
+        innerHtml += `<div class="price-preview" id="pricePreview">Total: $${baseItem.precio}</div><button class="btn-confirm" id="confirmBtn"><i class="fas fa-check"></i> Agregar al carrito</button>`;
+        modalContent.innerHTML = innerHtml;
+        document.getElementById("customizeModal").classList.add("active");
+        document.getElementById("closeCustomModal").onclick = () => document.getElementById("customizeModal").classList.remove("active");
+        
+        const cremaRadios = document.querySelectorAll('input[name="crema"]');
+        cremaRadios.forEach(r => r.onchange = () => { selectedCrema = r.value; });
+        
+        document.getElementById("confirmBtn").onclick = () => {
+            let finalName = `Pechuga Rellena - ${cremaMap[selectedCrema]}`;
+            if (descripcionBase && !finalName.includes(descripcionBase.substring(0,30))) {
+                finalName = finalName + " - " + descripcionBase;
             }
-        });
+            addToCartCustom({ id: baseItem.id + "_" + Date.now(), nombre: finalName, precio: baseItem.precio, cantidad: 1 });
+            document.getElementById("customizeModal").classList.remove("active");
+        };
     }
 
-    // Pastas con opciones de crema y proteína (sin papas)
+    // Pastas con proteina
     function openPastaModal(baseItem, cremaBase) {
         let selectedProteina = "ninguna";
-        let proteinaMap = { arrachera: "Arrachera +$30", camaron: "Camarón +$30", pollo_empanizado: "Pollo empanizado +$20", pollo_plancha: "Pollo a la plancha +$20" };
+        let proteinaMap = { arrachera: "Arrachera +$30", camaron: "Camaron +$30", pollo_empanizado: "Pollo empanizado +$20", pollo_plancha: "Pollo a la plancha +$20" };
         let proteinaPrecio = { arrachera: 30, camaron: 30, pollo_empanizado: 20, pollo_plancha: 20 };
-        let cremaMap = { poblano: "Poblano", chipotle: "Chipotle", elote: "Elote", champinon: "Champiñón" };
+        let cremaMap = { poblano: "Poblano", chipotle: "Chipotle", elote: "Elote", champinon: "Champinon" };
+        let descripcionBase = baseItem.desc || "";
         
-        openWithoutPapasOption(baseItem, {
-            html: `<div class="option-group"><label class="option-label">Elige tu proteína (opcional)</label><div class="radio-group"><label><input type="radio" name="proteina" value="ninguna" checked> Sin proteína</label><label><input type="radio" name="proteina" value="arrachera"> Arrachera (+$30)</label><label><input type="radio" name="proteina" value="camaron"> Camarón (+$30)</label><label><input type="radio" name="proteina" value="pollo_empanizado"> Pollo empanizado (+$20)</label><label><input type="radio" name="proteina" value="pollo_plancha"> Pollo a la plancha (+$20)</label></div></div>`,
-            getCustomization: () => {
-                let precioFinal = 79;
-                let nombreFinal = `Pasta ${cremaMap[cremaBase]}`;
-                if (selectedProteina !== "ninguna") {
-                    precioFinal += proteinaPrecio[selectedProteina];
-                    nombreFinal = `Pasta ${cremaMap[cremaBase]} con ${proteinaMap[selectedProteina]}`;
-                }
-                return { name: nombreFinal + " - Acompañada con pan de ajo", price: precioFinal };
-            },
-            init: () => { 
-                document.querySelectorAll('input[name="proteina"]').forEach(r => r.onchange = () => { selectedProteina = r.value; });
+        const modalContent = document.getElementById("customizeModalContent");
+        let innerHtml = `<div class="modal-header"><h2>${baseItem.nombre}</h2><button class="close-modal" id="closeCustomModal">&times;</button></div>`;
+        innerHtml += `<div class="option-group"><label class="option-label">Elige tu proteina (opcional)</label><div class="radio-group"><label><input type="radio" name="proteina" value="ninguna" checked> Sin proteina</label><label><input type="radio" name="proteina" value="arrachera"> Arrachera (+$30)</label><label><input type="radio" name="proteina" value="camaron"> Camaron (+$30)</label><label><input type="radio" name="proteina" value="pollo_empanizado"> Pollo empanizado (+$20)</label><label><input type="radio" name="proteina" value="pollo_plancha"> Pollo a la plancha (+$20)</label></div></div>`;
+        innerHtml += `<div class="price-preview" id="pricePreview">Total: $${baseItem.precio}</div><button class="btn-confirm" id="confirmBtn"><i class="fas fa-check"></i> Agregar al carrito</button>`;
+        modalContent.innerHTML = innerHtml;
+        document.getElementById("customizeModal").classList.add("active");
+        document.getElementById("closeCustomModal").onclick = () => document.getElementById("customizeModal").classList.remove("active");
+        
+        let basePrice = 79;
+        const priceSpan = document.getElementById("pricePreview");
+        const proteinaRadios = document.querySelectorAll('input[name="proteina"]');
+        
+        const updatePrice = () => {
+            let total = basePrice;
+            const proteinaSelected = document.querySelector('input[name="proteina"]:checked');
+            if (proteinaSelected && proteinaSelected.value !== "ninguna") {
+                total += proteinaPrecio[proteinaSelected.value];
             }
-        });
+            priceSpan.innerText = `Total: $${total}`;
+        };
+        
+        proteinaRadios.forEach(r => r.onchange = () => { selectedProteina = r.value; updatePrice(); });
+        
+        document.getElementById("confirmBtn").onclick = () => {
+            let finalPrice = basePrice;
+            let proteinaExtra = false;
+            const proteinaSelected = document.querySelector('input[name="proteina"]:checked');
+            if (proteinaSelected && proteinaSelected.value !== "ninguna") {
+                finalPrice += proteinaPrecio[proteinaSelected.value];
+                proteinaExtra = true;
+            }
+            let finalName = `Pasta ${cremaMap[cremaBase]}`;
+            if (proteinaExtra) {
+                finalName = `Pasta ${cremaMap[cremaBase]} con ${proteinaMap[selectedProteina]}`;
+            }
+            if (descripcionBase && !finalName.includes(descripcionBase.substring(0,30))) {
+                finalName = finalName + " - " + descripcionBase;
+            }
+            addToCartCustom({ id: baseItem.id + "_" + Date.now(), nombre: finalName, precio: finalPrice, cantidad: 1 });
+            document.getElementById("customizeModal").classList.remove("active");
+        };
+        updatePrice();
     }
 
-    // Pasta Boloñesa (sin papas)
-    function openPastaBolognesaModal(baseItem) {
-        openWithoutPapasOption(baseItem, {
-            html: ``,
-            getCustomization: () => ({ name: `Pasta Boloñesa - Acompañada con pan de ajo`, price: 110 }),
-            init: () => { }
-        });
-    }
-
-    // Enchiladas Rojas Mexicanas (sin papas)
-    function openEnchiladasRojasModal(baseItem) {
-        openWithoutPapasOption(baseItem, {
-            html: ``,
-            getCustomization: () => ({ name: `Enchiladas Rojas Mexicanas (5 piezas) - Con lechuga, chile en vinagre, papas y zanahoria`, price: 40 }),
-            init: () => { }
-        });
-    }
-
-    // CEVICHES Y COCTELES (sin papas)
-    function openCevicheModal(baseItem) {
-        let selectedSize = "chico";
-        let sizeMap = { chico: "Chico (1/2 Litro)", grande: "Grande (1 Litro)" };
-        let sizePrices = { chico: 130, grande: 160 };
-        openWithoutPapasOption(baseItem, {
-            html: `<div class="option-group"><label class="option-label">Elige el tamaño</label><div class="radio-group"><label><input type="radio" name="size" value="chico" checked> Chico (1/2 Litro) - $130</label><label><input type="radio" name="size" value="grande"> Grande (1 Litro) - $160</label></div></div>`,
-            getCustomization: () => ({ name: `Ceviche de Camarón en Salsa de Habanero ${sizeMap[selectedSize]} - Ceviche fresco con tostadas, salsa de habanero al gusto`, price: sizePrices[selectedSize] }),
-            init: () => { document.querySelectorAll('input[name="size"]').forEach(r => r.onchange = () => { selectedSize = r.value; }); }
-        });
-    }
-
+    // Ceviche Blanco de Pescado con tamaño
     function openCevicheBlancoPescadoModal(baseItem) {
         let selectedSize = "chico";
         let sizeMap = { chico: "Medio (1/2 Litro)", grande: "Grande (1 Litro)" };
         let sizePrices = { chico: 85, grande: 160 };
-        openWithoutPapasOption(baseItem, {
-            html: `<div class="option-group"><label class="option-label">Elige el tamaño</label><div class="radio-group"><label><input type="radio" name="size" value="chico" checked> Medio (1/2 Litro) - $85</label><label><input type="radio" name="size" value="grande"> Grande (1 Litro) - $160</label></div></div>`,
-            getCustomization: () => ({ name: `Ceviche Blanco de Pescado ${sizeMap[selectedSize]} - Acompañado con tostadas`, price: sizePrices[selectedSize] }),
-            init: () => { document.querySelectorAll('input[name="size"]').forEach(r => r.onchange = () => { selectedSize = r.value; }); }
-        });
+        let descripcionBase = baseItem.desc || "";
+        const modalContent = document.getElementById("customizeModalContent");
+        let innerHtml = `<div class="modal-header"><h2>${baseItem.nombre}</h2><button class="close-modal" id="closeCustomModal">&times;</button></div>`;
+        innerHtml += `<div class="option-group"><label class="option-label">Elige el tamaño</label><div class="radio-group"><label><input type="radio" name="size" value="chico" checked> Medio (1/2 Litro) - $85</label><label><input type="radio" name="size" value="grande"> Grande (1 Litro) - $160</label></div></div>`;
+        innerHtml += `<div class="price-preview" id="pricePreview">Total: $85</div><button class="btn-confirm" id="confirmBtn"><i class="fas fa-check"></i> Agregar al carrito</button>`;
+        modalContent.innerHTML = innerHtml;
+        document.getElementById("customizeModal").classList.add("active");
+        document.getElementById("closeCustomModal").onclick = () => document.getElementById("customizeModal").classList.remove("active");
+        
+        const priceSpan = document.getElementById("pricePreview");
+        const sizeRadios = document.querySelectorAll('input[name="size"]');
+        
+        sizeRadios.forEach(r => r.onchange = () => { selectedSize = r.value; priceSpan.innerText = `Total: $${sizePrices[selectedSize]}`; });
+        
+        document.getElementById("confirmBtn").onclick = () => {
+            let finalPrice = sizePrices[selectedSize];
+            let finalName = `Ceviche Blanco de Pescado ${sizeMap[selectedSize]}`;
+            if (descripcionBase && !finalName.includes(descripcionBase.substring(0,30))) {
+                finalName = finalName + " - " + descripcionBase;
+            }
+            addToCartCustom({ id: baseItem.id + "_" + Date.now(), nombre: finalName, precio: finalPrice, cantidad: 1 });
+            document.getElementById("customizeModal").classList.remove("active");
+        };
     }
 
+    // Ceviche de Camaron en Salsa de Habanero con tamaño
+    function openCevicheModal(baseItem) {
+        let selectedSize = "chico";
+        let sizeMap = { chico: "Chico (1/2 Litro)", grande: "Grande (1 Litro)" };
+        let sizePrices = { chico: 130, grande: 160 };
+        let descripcionBase = baseItem.desc || "";
+        const modalContent = document.getElementById("customizeModalContent");
+        let innerHtml = `<div class="modal-header"><h2>${baseItem.nombre}</h2><button class="close-modal" id="closeCustomModal">&times;</button></div>`;
+        innerHtml += `<div class="option-group"><label class="option-label">Elige el tamaño</label><div class="radio-group"><label><input type="radio" name="size" value="chico" checked> Chico (1/2 Litro) - $130</label><label><input type="radio" name="size" value="grande"> Grande (1 Litro) - $160</label></div></div>`;
+        innerHtml += `<div class="price-preview" id="pricePreview">Total: $130</div><button class="btn-confirm" id="confirmBtn"><i class="fas fa-check"></i> Agregar al carrito</button>`;
+        modalContent.innerHTML = innerHtml;
+        document.getElementById("customizeModal").classList.add("active");
+        document.getElementById("closeCustomModal").onclick = () => document.getElementById("customizeModal").classList.remove("active");
+        
+        const priceSpan = document.getElementById("pricePreview");
+        const sizeRadios = document.querySelectorAll('input[name="size"]');
+        
+        sizeRadios.forEach(r => r.onchange = () => { selectedSize = r.value; priceSpan.innerText = `Total: $${sizePrices[selectedSize]}`; });
+        
+        document.getElementById("confirmBtn").onclick = () => {
+            let finalPrice = sizePrices[selectedSize];
+            let finalName = `Ceviche de Camaron en Salsa de Habanero ${sizeMap[selectedSize]}`;
+            if (descripcionBase && !finalName.includes(descripcionBase.substring(0,30))) {
+                finalName = finalName + " - " + descripcionBase;
+            }
+            addToCartCustom({ id: baseItem.id + "_" + Date.now(), nombre: finalName, precio: finalPrice, cantidad: 1 });
+            document.getElementById("customizeModal").classList.remove("active");
+        };
+    }
+
+    // Coctel de Camaron con tamaño
     function openCoctelModal(baseItem) {
         let selectedSize = "chico";
         let sizeMap = { chico: "Chico", grande: "Grande" };
         let sizePrices = { chico: 130, grande: 160 };
-        openWithoutPapasOption(baseItem, {
-            html: `<div class="option-group"><label class="option-label">Elige el tamaño</label><div class="radio-group"><label><input type="radio" name="size" value="chico" checked> Chico - $130 (con galletas saladas)</label><label><input type="radio" name="size" value="grande"> Grande - $160 (con galletas saladas)</label></div></div>`,
-            getCustomization: () => ({ name: `Coctel de Camarón ${sizeMap[selectedSize]} con Galletas Saladas - Camarones frescos con salsa cocktail`, price: sizePrices[selectedSize] }),
-            init: () => { document.querySelectorAll('input[name="size"]').forEach(r => r.onchange = () => { selectedSize = r.value; }); }
+        let descripcionBase = baseItem.desc || "";
+        const modalContent = document.getElementById("customizeModalContent");
+        let innerHtml = `<div class="modal-header"><h2>${baseItem.nombre}</h2><button class="close-modal" id="closeCustomModal">&times;</button></div>`;
+        innerHtml += `<div class="option-group"><label class="option-label">Elige el tamaño</label><div class="radio-group"><label><input type="radio" name="size" value="chico" checked> Chico - $130 (con galletas saladas)</label><label><input type="radio" name="size" value="grande"> Grande - $160 (con galletas saladas)</label></div></div>`;
+        innerHtml += `<div class="price-preview" id="pricePreview">Total: $130</div><button class="btn-confirm" id="confirmBtn"><i class="fas fa-check"></i> Agregar al carrito</button>`;
+        modalContent.innerHTML = innerHtml;
+        document.getElementById("customizeModal").classList.add("active");
+        document.getElementById("closeCustomModal").onclick = () => document.getElementById("customizeModal").classList.remove("active");
+        
+        const priceSpan = document.getElementById("pricePreview");
+        const sizeRadios = document.querySelectorAll('input[name="size"]');
+        
+        sizeRadios.forEach(r => r.onchange = () => { selectedSize = r.value; priceSpan.innerText = `Total: $${sizePrices[selectedSize]}`; });
+        
+        document.getElementById("confirmBtn").onclick = () => {
+            let finalPrice = sizePrices[selectedSize];
+            let finalName = `Coctel de Camaron ${sizeMap[selectedSize]} con Galletas Saladas`;
+            if (descripcionBase && !finalName.includes(descripcionBase.substring(0,30))) {
+                finalName = finalName + " - " + descripcionBase;
+            }
+            addToCartCustom({ id: baseItem.id + "_" + Date.now(), nombre: finalName, precio: finalPrice, cantidad: 1 });
+            document.getElementById("customizeModal").classList.remove("active");
+        };
+    }
+
+    // Big Sandwich con selector de salsa
+    function openBigSandwichModal(baseItem) {
+        let selectedSalsa = "buffalo";
+        let salsaMap = { buffalo: "Buffalo", bbq: "BBQ" };
+        openBreakfastWithOptions(baseItem, {
+            html: `<div class="option-group"><label class="option-label">Elige tu salsa</label><div class="radio-group">
+                <label><input type="radio" name="salsa" value="buffalo" checked> Salsa Buffalo</label>
+                <label><input type="radio" name="salsa" value="bbq"> Salsa BBQ</label>
+            </div></div>`,
+            getCustomization: () => ({ name: `Big Sandwich (Salsa ${salsaMap[selectedSalsa]})`, price: 85 }),
+            init: () => { document.querySelectorAll('input[name="salsa"]').forEach(r => r.onchange = () => { selectedSalsa = r.value; }); }
         });
     }
 
-    // Para platillos que solo llevan papas extra (sin otras opciones)
-    function openExtraPapasModal(baseItem) { 
-        openWithPapasOption(baseItem, null); 
+    // Postres con selector de helado y baño
+    function openPostreModal(baseItem) {
+        let selectedHelado = "vainilla";
+        let selectedBaño = "lechera";
+        let descripcionBase = baseItem.desc || "";
+        const modalContent = document.getElementById("customizeModalContent");
+        modalContent.innerHTML = `
+            <div class="modal-header"><h2>${baseItem.nombre}</h2><button class="close-modal" id="closeCustomModal">&times;</button></div>
+            <div class="option-group"><label class="option-label">Sabor de helado</label><div class="radio-group">
+                <label><input type="radio" name="helado" value="vainilla" checked> Vainilla</label>
+                <label><input type="radio" name="helado" value="chocolate"> Chocolate</label>
+                <label><input type="radio" name="helado" value="fresa"> Fresa</label>
+            </div></div>
+            <div class="option-group"><label class="option-label">Bañado con</label><div class="radio-group">
+                <label><input type="radio" name="baño" value="lechera" checked> Lechera</label>
+                <label><input type="radio" name="baño" value="miel"> Miel</label>
+            </div></div>
+            <div class="price-preview" id="pricePreview">Total: $${baseItem.precio}</div>
+            <button class="btn-confirm" id="confirmBtn"><i class="fas fa-check"></i> Agregar al carrito</button>
+        `;
+        document.getElementById("customizeModal").classList.add("active");
+        document.getElementById("closeCustomModal").onclick = () => document.getElementById("customizeModal").classList.remove("active");
+        
+        document.querySelectorAll('input[name="helado"]').forEach(r => r.onchange = () => { selectedHelado = r.value; });
+        document.querySelectorAll('input[name="baño"]').forEach(r => r.onchange = () => { selectedBaño = r.value; });
+        
+        document.getElementById("confirmBtn").onclick = () => {
+            let heladoMap = { vainilla: "Vainilla", chocolate: "Chocolate", fresa: "Fresa" };
+            let bañoMap = { lechera: "Lechera", miel: "Miel" };
+            let finalName = `${baseItem.nombre} (Helado: ${heladoMap[selectedHelado]}, Bañado con ${bañoMap[selectedBaño]})`;
+            if (descripcionBase && !finalName.includes(descripcionBase.substring(0,30))) {
+                finalName = finalName + " - " + descripcionBase;
+            }
+            addToCartCustom({ id: baseItem.id + "_" + Date.now(), nombre: finalName, precio: baseItem.precio, cantidad: 1 });
+            document.getElementById("customizeModal").classList.remove("active");
+        };
     }
 
+    // Malteadas con selector de leche
+    function openMalteadaModal(baseItem, sabor) {
+        let selectedLeche = "entera";
+        let descripcionBase = baseItem.desc || "";
+        const modalContent = document.getElementById("customizeModalContent");
+        modalContent.innerHTML = `
+            <div class="modal-header"><h2>Malteada de ${sabor}</h2><button class="close-modal" id="closeCustomModal">&times;</button></div>
+            <div class="option-group"><label class="option-label">Tipo de leche</label><div class="radio-group">
+                <label><input type="radio" name="leche" value="entera" checked> Leche Entera</label>
+                <label><input type="radio" name="leche" value="deslactosada"> Leche Deslactosada</label>
+            </div></div>
+            <div class="price-preview" id="pricePreview">Total: $55</div>
+            <button class="btn-confirm" id="confirmBtn"><i class="fas fa-check"></i> Agregar al carrito</button>
+        `;
+        document.getElementById("customizeModal").classList.add("active");
+        document.getElementById("closeCustomModal").onclick = () => document.getElementById("customizeModal").classList.remove("active");
+        
+        document.querySelectorAll('input[name="leche"]').forEach(r => r.onchange = () => { selectedLeche = r.value; });
+        
+        document.getElementById("confirmBtn").onclick = () => {
+            let lecheMap = { entera: "Leche Entera", deslactosada: "Leche Deslactosada" };
+            let finalName = `Malteada de ${sabor} (${lecheMap[selectedLeche]})`;
+            if (descripcionBase && !finalName.includes(descripcionBase.substring(0,30))) {
+                finalName = finalName + " - " + descripcionBase;
+            }
+            addToCartCustom({ id: "malteada_" + sabor + "_" + Date.now(), nombre: finalName, precio: 55, cantidad: 1 });
+            document.getElementById("customizeModal").classList.remove("active");
+        };
+    }
+
+    // Cafe clasico
+    function openCafeModal() {
+        let conCrema = false;
+        let conAzucar = false;
+        const modalContent = document.getElementById("customizeModalContent");
+        modalContent.innerHTML = `
+            <div class="modal-header"><h2>Cafe Clasico Nescafe</h2><button class="close-modal" id="closeCustomModal">&times;</button></div>
+            <div class="option-group"><label class="option-label">Crema</label><div class="radio-group">
+                <label><input type="radio" name="crema" value="no" checked> Sin crema</label>
+                <label><input type="radio" name="crema" value="si"> Con crema</label>
+            </div></div>
+            <div class="option-group"><label class="option-label">Azucar</label><div class="radio-group">
+                <label><input type="radio" name="azucar" value="no" checked> Sin azucar</label>
+                <label><input type="radio" name="azucar" value="si"> Con azucar</label>
+            </div></div>
+            <div class="price-preview" id="pricePreview">Total: $30</div>
+            <button class="btn-confirm" id="confirmBtn"><i class="fas fa-check"></i> Agregar al carrito</button>
+        `;
+        document.getElementById("customizeModal").classList.add("active");
+        document.getElementById("closeCustomModal").onclick = () => document.getElementById("customizeModal").classList.remove("active");
+        
+        document.querySelectorAll('input[name="crema"]').forEach(r => r.onchange = () => { conCrema = r.value === "si"; });
+        document.querySelectorAll('input[name="azucar"]').forEach(r => r.onchange = () => { conAzucar = r.value === "si"; });
+        
+        document.getElementById("confirmBtn").onclick = () => {
+            let finalName = `Cafe Clasico Nescafe${conCrema ? " con crema" : " sin crema"}${conAzucar ? " con azucar" : " sin azucar"}`;
+            addToCartCustom({ id: "cafe_" + Date.now(), nombre: finalName, precio: 30, cantidad: 1 });
+            document.getElementById("customizeModal").classList.remove("active");
+        };
+    }
+
+    // Capuchino
+    function openCapuchinoModal() {
+        let conAzucar = false;
+        const modalContent = document.getElementById("customizeModalContent");
+        modalContent.innerHTML = `
+            <div class="modal-header"><h2>Capuchino</h2><button class="close-modal" id="closeCustomModal">&times;</button></div>
+            <div class="option-group"><label class="option-label">Azucar</label><div class="radio-group">
+                <label><input type="radio" name="azucar" value="no" checked> Sin azucar</label>
+                <label><input type="radio" name="azucar" value="si"> Con azucar</label>
+            </div></div>
+            <div class="price-preview" id="pricePreview">Total: $45</div>
+            <button class="btn-confirm" id="confirmBtn"><i class="fas fa-check"></i> Agregar al carrito</button>
+        `;
+        document.getElementById("customizeModal").classList.add("active");
+        document.getElementById("closeCustomModal").onclick = () => document.getElementById("customizeModal").classList.remove("active");
+        
+        document.querySelectorAll('input[name="azucar"]').forEach(r => r.onchange = () => { conAzucar = r.value === "si"; });
+        
+        document.getElementById("confirmBtn").onclick = () => {
+            let finalName = `Capuchino${conAzucar ? " con azucar" : " sin azucar"}`;
+            addToCartCustom({ id: "capuchino_" + Date.now(), nombre: finalName, precio: 45, cantidad: 1 });
+            document.getElementById("customizeModal").classList.remove("active");
+        };
+    }
+
+    // Chocolate caliente
+    function openChocolateCalienteModal() {
+        let selectedLeche = "entera";
+        const modalContent = document.getElementById("customizeModalContent");
+        modalContent.innerHTML = `
+            <div class="modal-header"><h2>Chocolate Caliente</h2><button class="close-modal" id="closeCustomModal">&times;</button></div>
+            <div class="option-group"><label class="option-label">Tipo de leche</label><div class="radio-group">
+                <label><input type="radio" name="leche" value="entera" checked> Leche Entera</label>
+                <label><input type="radio" name="leche" value="deslactosada"> Leche Deslactosada</label>
+            </div></div>
+            <div class="price-preview" id="pricePreview">Total: $35</div>
+            <button class="btn-confirm" id="confirmBtn"><i class="fas fa-check"></i> Agregar al carrito</button>
+        `;
+        document.getElementById("customizeModal").classList.add("active");
+        document.getElementById("closeCustomModal").onclick = () => document.getElementById("customizeModal").classList.remove("active");
+        
+        document.querySelectorAll('input[name="leche"]').forEach(r => r.onchange = () => { selectedLeche = r.value; });
+        
+        document.getElementById("confirmBtn").onclick = () => {
+            let lecheMap = { entera: "Leche Entera", deslactosada: "Leche Deslactosada" };
+            let finalName = `Chocolate Caliente (${lecheMap[selectedLeche]})`;
+            addToCartCustom({ id: "chocolate_caliente_" + Date.now(), nombre: finalName, precio: 35, cantidad: 1 });
+            document.getElementById("customizeModal").classList.remove("active");
+        };
+    }
+
+    // Ensalada personalizada
     function openEnsaladaModal() { 
-        const ingredients = ["Lechuga","Espinaca","Manzana Verde","Naranja","Nuez","Arándanos","Pasta","Zanahoria","Elote","Pepino","Jitomate","Aguacate","Cebolla Morada","Semillas","Crotons","Queso Panela"]; 
-        const proteins = [{name:"Arrachera",price:30},{name:"Pollo a la Plancha",price:25},{name:"Camarón",price:35}]; 
+        const ingredients = ["Lechuga","Espinaca","Manzana Verde","Naranja","Nuez","Arandanos","Pasta","Zanahoria","Elote","Pepino","Jitomate","Aguacate","Cebolla Morada","Semillas","Crotons","Queso Panela"]; 
+        const proteins = [{name:"Arrachera",price:30},{name:"Pollo a la Plancha",price:25},{name:"Camaron",price:35}]; 
         let selectedIngredients = []; let selectedProtein = null; let proteinPrice = 0; 
         const updatePrice = () => { document.getElementById("ensaladaPrice").innerText = `Total: $${89 + proteinPrice}`; }; 
         const modalContent = document.getElementById("customizeModalContent"); 
-        modalContent.innerHTML = `<div class="modal-header"><h2>Personaliza tu Ensalada</h2><button class="close-modal" id="closeCustomModal">&times;</button></div><div class="option-group"><label class="option-label">Ingredientes (máx. 6)</label><div class="counter-info" id="ingredientCounter">0/6 seleccionados</div><div class="ingredients-grid" id="ingredientsGrid"></div></div><div class="option-group"><label class="option-label">Proteína extra (opcional)</label><select id="proteinSelect" class="protein-select"><option value="">Sin proteína</option>${proteins.map(p=>`<option value="${p.name}" data-price="${p.price}">${p.name} (+$${p.price})</option>`).join('')}</select></div><div class="price-preview" id="ensaladaPrice">Total: $89</div><button class="btn-confirm" id="confirmBtn"><i class="fas fa-check"></i> Agregar al carrito</button>`; 
+        modalContent.innerHTML = `<div class="modal-header"><h2>Personaliza tu Ensalada</h2><button class="close-modal" id="closeCustomModal">&times;</button></div><div class="option-group"><label class="option-label">Ingredientes (max. 6)</label><div class="counter-info" id="ingredientCounter">0/6 seleccionados</div><div class="ingredients-grid" id="ingredientsGrid"></div></div><div class="option-group"><label class="option-label">Proteina extra (opcional)</label><select id="proteinSelect" class="protein-select"><option value="">Sin proteina</option>${proteins.map(p=>`<option value="${p.name}" data-price="${p.price}">${p.name} (+$${p.price})</option>`).join('')}</select></div><div class="price-preview" id="ensaladaPrice">Total: $89</div><button class="btn-confirm" id="confirmBtn"><i class="fas fa-check"></i> Agregar al carrito</button>`; 
         document.getElementById("customizeModal").classList.add("active"); 
         document.getElementById("closeCustomModal").onclick = () => document.getElementById("customizeModal").classList.remove("active"); 
         const grid = document.getElementById("ingredientsGrid"); 
-        ingredients.forEach(ing => { const chip = document.createElement("div"); chip.className = "ingredient-chip"; chip.innerText = ing; chip.onclick = () => { if(chip.classList.contains("selected")){ chip.classList.remove("selected"); selectedIngredients = selectedIngredients.filter(i=>i!==ing); }else{ if(selectedIngredients.length>=6){ alert("Máximo 6 ingredientes"); return; } chip.classList.add("selected"); selectedIngredients.push(ing); } document.getElementById("ingredientCounter").innerText = `${selectedIngredients.length}/6 seleccionados`; }; grid.appendChild(chip); }); 
+        ingredients.forEach(ing => { const chip = document.createElement("div"); chip.className = "ingredient-chip"; chip.innerText = ing; chip.onclick = () => { if(chip.classList.contains("selected")){ chip.classList.remove("selected"); selectedIngredients = selectedIngredients.filter(i=>i!==ing); }else{ if(selectedIngredients.length>=6){ alert("Maximo 6 ingredientes"); return; } chip.classList.add("selected"); selectedIngredients.push(ing); } document.getElementById("ingredientCounter").innerText = `${selectedIngredients.length}/6 seleccionados`; }; grid.appendChild(chip); }); 
         const proteinSelect = document.getElementById("proteinSelect"); 
         proteinSelect.onchange = () => { if(proteinSelect.value){ selectedProtein = proteinSelect.value; proteinPrice = parseInt(proteinSelect.selectedOptions[0].dataset.price); }else{ selectedProtein = null; proteinPrice = 0; } updatePrice(); }; 
-        document.getElementById("confirmBtn").onclick = () => { if(selectedIngredients.length === 0){ alert("Selecciona al menos 1 ingrediente"); return; } const nombre = `Ensalada Personalizada (${selectedIngredients.join(", ")})${selectedProtein?` + ${selectedProtein}`:""} - Elige hasta 6 ingredientes y proteína extra`; addToCartCustom({ id:"ensalada_"+Date.now(), nombre:nombre, precio:89+proteinPrice, cantidad:1 }); document.getElementById("customizeModal").classList.remove("active"); }; updatePrice(); 
+        document.getElementById("confirmBtn").onclick = () => { if(selectedIngredients.length === 0){ alert("Selecciona al menos 1 ingrediente"); return; } const nombre = `Ensalada Personalizada (${selectedIngredients.join(", ")})${selectedProtein?` + ${selectedProtein}`:""}`; addToCartCustom({ id:"ensalada_"+Date.now(), nombre:nombre, precio:89+proteinPrice, cantidad:1 }); document.getElementById("customizeModal").classList.remove("active"); }; updatePrice(); 
     }
 
+    // Tacos
     function openTacosModal() {
         let tacosAgregados = [];
         let salsaSeleccionada = "roja";
-        
-        // Función para cerrar el modal correctamente
-        const closeModal = () => {
-            const modal = document.getElementById("customizeModal");
-            if (modal) modal.classList.remove("active");
-        };
-        
+        const closeModal = () => { const modal = document.getElementById("customizeModal"); if (modal) modal.classList.remove("active"); };
         function renderTacosModal() {
             let total = tacosAgregados.reduce((sum, taco) => sum + taco.precio, 0);
             const modalContent = document.getElementById("customizeModalContent");
             let tacosListHtml = '';
-            if (tacosAgregados.length === 0) {
-                tacosListHtml = '<div class="tacos-empty">No hay tacos agregados aún</div>';
-            } else {
-                tacosAgregados.forEach((taco, idx) => {
-                    let complementos = [];
-                    if (!taco.cebolla) complementos.push("sin cebolla");
-                    if (!taco.cilantro) complementos.push("sin cilantro");
-                    let complementosText = complementos.length ? ` (${complementos.join(", ")})` : "";
-                    tacosListHtml += `<div class="taco-resumen">
-                        <span class="taco-resumen-texto">${taco.cantidad} x ${taco.nombre}${complementosText}</span>
-                        <span class="taco-resumen-precio">$${taco.precio}</span>
-                        <button class="btn-eliminar-taco" data-idx="${idx}">✖</button>
-                    </div>`;
-                });
+            if (tacosAgregados.length === 0) { tacosListHtml = '<div class="tacos-empty">No hay tacos agregados aun</div>'; } else {
+                tacosAgregados.forEach((taco, idx) => { let complementos = []; if (!taco.cebolla) complementos.push("sin cebolla"); if (!taco.cilantro) complementos.push("sin cilantro"); let complementosText = complementos.length ? ` (${complementos.join(", ")})` : ""; tacosListHtml += `<div class="taco-resumen"><span class="taco-resumen-texto">${taco.cantidad} x ${taco.nombre}${complementosText}</span><span class="taco-resumen-precio">$${taco.precio}</span><button class="btn-eliminar-taco" data-idx="${idx}">✖</button></div>`; });
             }
-            
-            modalContent.innerHTML = `
-                <div class="modal-header"><h2>Pedir Tacos</h2><button class="close-modal" id="closeCustomModal">&times;</button></div>
-                
-                <div class="salsa-selector">
-                    <div class="salsa-selector-title">Salsa para todo el pedido (se envía en bolsita aparte)</div>
-                    <div class="radio-group" style="gap: 24px;">
-                        <label><input type="radio" name="salsaGlobal" value="roja" ${salsaSeleccionada === "roja" ? "checked" : ""}> Salsa Roja</label>
-                        <label><input type="radio" name="salsaGlobal" value="verde" ${salsaSeleccionada === "verde" ? "checked" : ""}> Salsa Verde</label>
-                        <label><input type="radio" name="salsaGlobal" value="ninguna" ${salsaSeleccionada === "ninguna" ? "checked" : ""}> Sin salsa</label>
-                    </div>
-                </div>
-                
-                <div class="taco-item">
-                    <div class="taco-header"><span class="taco-nombre">Arrachera</span><span class="taco-precio">$20 c/u</span></div>
-                    <div class="taco-verduras">
-                        <label><input type="checkbox" id="arrachera_cebolla"> Cebolla</label>
-                        <label><input type="checkbox" id="arrachera_cilantro"> Cilantro</label>
-                    </div>
-                    <button class="btn-agregar-taco" data-tipo="arrachera">+ Agregar taco de Arrachera</button>
-                </div>
-                
-                <div class="taco-item">
-                    <div class="taco-header"><span class="taco-nombre">Bistec</span><span class="taco-precio">$14 c/u</span></div>
-                    <div class="taco-verduras">
-                        <label><input type="checkbox" id="bistec_cebolla"> Cebolla</label>
-                        <label><input type="checkbox" id="bistec_cilantro"> Cilantro</label>
-                    </div>
-                    <button class="btn-agregar-taco" data-tipo="bistec">+ Agregar taco de Bistec</button>
-                </div>
-                
-                <div class="taco-item">
-                    <div class="taco-header"><span class="taco-nombre">Chorizo</span><span class="taco-precio">$14 c/u</span></div>
-                    <div class="taco-verduras">
-                        <label><input type="checkbox" id="chorizo_cebolla"> Cebolla</label>
-                        <label><input type="checkbox" id="chorizo_cilantro"> Cilantro</label>
-                    </div>
-                    <button class="btn-agregar-taco" data-tipo="chorizo">+ Agregar taco de Chorizo</button>
-                </div>
-                
-                <div class="taco-item">
-                    <div class="taco-header"><span class="taco-nombre">Campechano</span><span class="taco-precio">$15 c/u</span></div>
-                    <div class="taco-verduras">
-                        <label><input type="checkbox" id="campechano_cebolla"> Cebolla</label>
-                        <label><input type="checkbox" id="campechano_cilantro"> Cilantro</label>
-                    </div>
-                    <button class="btn-agregar-taco" data-tipo="campechano">+ Agregar taco de Campechano</button>
-                </div>
-                
-                <div style="margin-top: 24px;"><label class="option-label">Resumen de tu pedido</label></div>
-                <div id="tacosListaContainer" class="tacos-lista">${tacosListHtml}</div>
-                <div class="total-tacos" id="tacosTotalPrecio">Total: $${total}</div>
-                <button class="btn-confirm" id="confirmTacosFinalBtn"><i class="fas fa-check"></i> Agregar ${tacosAgregados.length} taco(s) al carrito</button>
-            `;
-            
-            // Asignar eventos después de renderizar
-            const closeModalBtn = document.getElementById("closeCustomModal");
-            if (closeModalBtn) {
-                closeModalBtn.onclick = closeModal;
-            }
-            
-            document.querySelectorAll('input[name="salsaGlobal"]').forEach(radio => {
-                radio.onchange = () => { if (radio.checked) salsaSeleccionada = radio.value; };
-            });
-            
-            document.querySelectorAll('.btn-agregar-taco').forEach(btn => {
-                btn.onclick = () => {
-                    let tipo = btn.dataset.tipo;
-                    let precios = { arrachera: 20, bistec: 14, chorizo: 14, campechano: 15 };
-                    let nombres = { arrachera: "Arrachera", bistec: "Bistec", chorizo: "Chorizo", campechano: "Campechano" };
-                    let precio = precios[tipo];
-                    let nombre = nombres[tipo];
-                    
-                    let cebolla = document.getElementById(`${tipo}_cebolla`)?.checked ?? false;
-                    let cilantro = document.getElementById(`${tipo}_cilantro`)?.checked ?? false;
-                    
-                    tacosAgregados.push({
-                        id: Date.now() + Math.random(),
-                        tipo: tipo,
-                        nombre: nombre,
-                        precio: precio,
-                        cantidad: 1,
-                        cebolla: cebolla,
-                        cilantro: cilantro
-                    });
-                    renderTacosModal();
-                };
-            });
-            
-            document.querySelectorAll('.btn-eliminar-taco').forEach(btn => {
-                btn.onclick = () => {
-                    let idx = parseInt(btn.dataset.idx);
-                    tacosAgregados.splice(idx, 1);
-                    renderTacosModal();
-                };
-            });
-            
-            const confirmBtn = document.getElementById("confirmTacosFinalBtn");
-            if (confirmBtn) {
-                confirmBtn.onclick = () => {
-                    if (tacosAgregados.length === 0) {
-                        alert("Agrega al menos un taco");
-                        return;
-                    }
-                    let total = tacosAgregados.reduce((sum, taco) => sum + taco.precio, 0);
-                    let salsaTexto = salsaSeleccionada === "roja" ? "Salsa roja" : (salsaSeleccionada === "verde" ? "Salsa verde" : "Sin salsa");
-                    
-                    let tacosTexto = tacosAgregados.map(t => {
-                        let complementos = [];
-                        if (!t.cebolla) complementos.push("sin cebolla");
-                        if (!t.cilantro) complementos.push("sin cilantro");
-                        let compText = complementos.length ? ` (${complementos.join(", ")})` : "";
-                        return `${t.cantidad} x ${t.nombre}${compText}`;
-                    }).join(", ");
-                    
-                    addToCartCustom({ 
-                        id: "tacos_paquete_" + Date.now(), 
-                        nombre: `Tacos: ${tacosTexto} | Salsa: ${salsaTexto} (en bolsita aparte)`, 
-                        precio: total, 
-                        cantidad: 1 
-                    });
-                    // Cerrar el modal correctamente
-                    closeModal();
-                };
-            }
+            modalContent.innerHTML = `<div class="modal-header"><h2>Pedir Tacos</h2><button class="close-modal" id="closeCustomModal">&times;</button></div><div class="salsa-selector"><div class="salsa-selector-title">Salsa para todo el pedido (se envia en bolsita aparte)</div><div class="radio-group" style="gap: 24px;"><label><input type="radio" name="salsaGlobal" value="roja" ${salsaSeleccionada === "roja" ? "checked" : ""}> Salsa Roja</label><label><input type="radio" name="salsaGlobal" value="verde" ${salsaSeleccionada === "verde" ? "checked" : ""}> Salsa Verde</label><label><input type="radio" name="salsaGlobal" value="ninguna" ${salsaSeleccionada === "ninguna" ? "checked" : ""}> Sin salsa</label></div></div><div class="taco-item"><div class="taco-header"><span class="taco-nombre">Arrachera</span><span class="taco-precio">$20 c/u</span></div><div class="taco-verduras"><label><input type="checkbox" id="arrachera_cebolla"> Cebolla</label><label><input type="checkbox" id="arrachera_cilantro"> Cilantro</label></div><button class="btn-agregar-taco" data-tipo="arrachera">+ Agregar taco de Arrachera</button></div><div class="taco-item"><div class="taco-header"><span class="taco-nombre">Bistec</span><span class="taco-precio">$14 c/u</span></div><div class="taco-verduras"><label><input type="checkbox" id="bistec_cebolla"> Cebolla</label><label><input type="checkbox" id="bistec_cilantro"> Cilantro</label></div><button class="btn-agregar-taco" data-tipo="bistec">+ Agregar taco de Bistec</button></div><div class="taco-item"><div class="taco-header"><span class="taco-nombre">Chorizo</span><span class="taco-precio">$14 c/u</span></div><div class="taco-verduras"><label><input type="checkbox" id="chorizo_cebolla"> Cebolla</label><label><input type="checkbox" id="chorizo_cilantro"> Cilantro</label></div><button class="btn-agregar-taco" data-tipo="chorizo">+ Agregar taco de Chorizo</button></div><div class="taco-item"><div class="taco-header"><span class="taco-nombre">Campechano</span><span class="taco-precio">$15 c/u</span></div><div class="taco-verduras"><label><input type="checkbox" id="campechano_cebolla"> Cebolla</label><label><input type="checkbox" id="campechano_cilantro"> Cilantro</label></div><button class="btn-agregar-taco" data-tipo="campechano">+ Agregar taco de Campechano</button></div><div style="margin-top: 24px;"><label class="option-label">Resumen de tu pedido</label></div><div id="tacosListaContainer" class="tacos-lista">${tacosListHtml}</div><div class="total-tacos" id="tacosTotalPrecio">Total: $${total}</div><button class="btn-confirm" id="confirmTacosFinalBtn"><i class="fas fa-check"></i> Agregar ${tacosAgregados.length} taco(s) al carrito</button>`;
+            document.getElementById("closeCustomModal").onclick = closeModal;
+            document.querySelectorAll('input[name="salsaGlobal"]').forEach(radio => { radio.onchange = () => { if (radio.checked) salsaSeleccionada = radio.value; }; });
+            document.querySelectorAll('.btn-agregar-taco').forEach(btn => { btn.onclick = () => { let tipo = btn.dataset.tipo; let precios = { arrachera: 20, bistec: 14, chorizo: 14, campechano: 15 }; let nombres = { arrachera: "Arrachera", bistec: "Bistec", chorizo: "Chorizo", campechano: "Campechano" }; let precio = precios[tipo]; let nombre = nombres[tipo]; let cebolla = document.getElementById(`${tipo}_cebolla`)?.checked ?? false; let cilantro = document.getElementById(`${tipo}_cilantro`)?.checked ?? false; tacosAgregados.push({ id: Date.now() + Math.random(), tipo: tipo, nombre: nombre, precio: precio, cantidad: 1, cebolla: cebolla, cilantro: cilantro }); renderTacosModal(); }; });
+            document.querySelectorAll('.btn-eliminar-taco').forEach(btn => { btn.onclick = () => { let idx = parseInt(btn.dataset.idx); tacosAgregados.splice(idx, 1); renderTacosModal(); }; });
+            document.getElementById("confirmTacosFinalBtn").onclick = () => { if (tacosAgregados.length === 0) { alert("Agrega al menos un taco"); return; } let total = tacosAgregados.reduce((sum, taco) => sum + taco.precio, 0); let salsaTexto = salsaSeleccionada === "roja" ? "Salsa roja" : (salsaSeleccionada === "verde" ? "Salsa verde" : "Sin salsa"); let tacosTexto = tacosAgregados.map(t => { let complementos = []; if (!t.cebolla) complementos.push("sin cebolla"); if (!t.cilantro) complementos.push("sin cilantro"); let compText = complementos.length ? ` (${complementos.join(", ")})` : ""; return `${t.cantidad} x ${t.nombre}${compText}`; }).join(", "); addToCartCustom({ id: "tacos_paquete_" + Date.now(), nombre: `Tacos: ${tacosTexto} | Salsa: ${salsaTexto}`, precio: total, cantidad: 1 }); closeModal(); };
         }
-        
         renderTacosModal();
         document.getElementById("customizeModal").classList.add("active");
     }
 
+    // ========== MENU COMPLETO ==========
     const menuItems = [
-        // CLÁSICOS
-        { id:"milanesa_pollo", nombre:"Milanesa de Pollo", precio:95, desc:"Crujiente, arroz y vegetales al vapor, acompañada con pan de ajo.", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGUoz38VVQ7qxu1veIYz7m9AhCr7o8d0HMcg&s", categoria:"clasicos", custom:(item)=>openExtraPapasModal(item) },
-        { id:"fajitas_res", nombre:"Fajitas de Res", precio:159, desc:"Con guacamole, frijoles, salsa y totopos", img:"https://jetextramar.com/wp-content/uploads/2021/07/empresa-de-alimentos-receta-de-guacamole.jpg", categoria:"clasicos", custom:(item)=>openExtraPapasModal(item) },
+        // CLASICOS
+        { id:"milanesa_pollo", nombre:"Milanesa de Pollo", precio:95, desc:"Crujiente, arroz y vegetales al vapor, acompanada con pan de ajo.", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGUoz38VVQ7qxu1veIYz7m9AhCr7o8d0HMcg&s", categoria:"clasicos", custom:(item)=>openWithPapasOption(item) },
+        { id:"fajitas_res", nombre:"Fajitas de Res", precio:159, desc:"Con guacamole, frijoles, salsa y totopos", img:"https://jetextramar.com/wp-content/uploads/2021/07/empresa-de-alimentos-receta-de-guacamole.jpg", categoria:"clasicos", custom:(item)=>openWithPapasOption(item) },
         { id:"papas_alhorno", nombre:"Papas al Horno", precio:89, desc:"Gratinadas con queso, y con galletas saladas", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQggF8LfUl7U0eUUBnWe225Ilx0A-XISUFSJQ&s", categoria:"clasicos", custom:(item)=>openPapasRellenoModal(item) },
-        { id:"pollo_oriental", nombre:"Pollo Tipo Oriental", precio:110, desc:"Con vegetales y pan con ajo", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgcDfLUdzL9XLazMpjU_ilAC6WcOvp96SJjA&s", categoria:"clasicos", custom:(item)=>openExtraPapasModal(item) },
-        { id:"filete_pescado", nombre:"Filete de Pescado Empapelado con Camarón", precio:115, desc:"Pescado en papillote con camarones, gratinado con queso, morrón, cebolla y jalapeño, acompañado con arroz blanco y pan de ajo.", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUtmcNcgxHKt-omWj5nY83cSGAQW7E_CWbuw&s", categoria:"clasicos", custom:(item)=>openExtraPapasModal(item) },
-        { id:"filete_empanizado", nombre:"Filete Empanizado", precio:139, desc:"Acompañado de ensalada, arroz y pan con ajo.", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZv5kGbXJgveauBmsGoxzzUuDHwp7evPsdJg&s", categoria:"clasicos", custom:(item)=>openExtraPapasModal(item) },
-        { id:"chiles_rellenos", nombre:"Chile Relleno", precio:119, desc:"Chile poblano relleno de queso, capeado y bañado en salsa de jitomate, acompañado de arroz y tortillas.", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQm2DrNYQtm46uz4L9g2VDw4HrZQnpqhiMVDA&s", categoria:"clasicos", custom:(item)=>openWithoutPapasOption }, // SIN PAPAS
+        { id:"pollo_oriental", nombre:"Pollo Tipo Oriental", precio:110, desc:"Con vegetales y pan con ajo", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgcDfLUdzL9XLazMpjU_ilAC6WcOvp96SJjA&s", categoria:"clasicos", custom:(item)=>openWithPapasOption(item) },
+        { id:"filete_pescado", nombre:"Filete de Pescado Empapelado con Camaron", precio:115, desc:"Pescado en papillote con camarones, gratinado con queso, morron, cebolla y jalapeno, acompanado con arroz blanco y pan de ajo.", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUtmcNcgxHKt-omWj5nY83cSGAQW7E_CWbuw&s", categoria:"clasicos", custom:(item)=>openWithPapasOption(item) },
+        { id:"filete_empanizado", nombre:"Filete Empanizado", precio:139, desc:"Acompanado de ensalada, arroz y pan con ajo.", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZv5kGbXJgveauBmsGoxzzUuDHwp7evPsdJg&s", categoria:"clasicos", custom:(item)=>openWithPapasOption(item) },
+        { id:"chiles_rellenos", nombre:"Chile Relleno", precio:119, desc:"Chile poblano relleno de queso, capeado y banado en salsa de jitomate, acompanado de arroz y tortillas.", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQm2DrNYQtm46uz4L9g2VDw4HrZQnpqhiMVDA&s", categoria:"clasicos", custom:(item)=>openSimpleModal(item) },
         { id:"alitas", nombre:"Alitas", precio:105, desc:"6 alitas de pollo - Elige tu salsa", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRatQbVm-pLwkCS-Dsup1GfUC9lND429K0VZg&s", categoria:"clasicos", custom:(item)=>openAlitasModal(item) },
-        { id:"enchiladas_chipotle", nombre:"Enchiladas en Crema de Chipotle", precio:85, desc:"4 enchiladas bañadas en crema de chipotle, acompañadas de ensalada.", img:"https://cdn.avena.io/avena-recipes-v2/2019/10/1571780027584.jpeg", categoria:"clasicos", custom:(item)=>openWithoutPapasOption }, // SIN PAPAS
-        { id:"alambre", nombre:"Alambre", precio:159, desc:"Carne de res con morrón, cebolla, tocino, gratinado con queso, acompañado de puré de papa, frijoles, tortillas y salsa", img:"https://www.apega.pe/wp-content/uploads/2025/06/receta-de-alambre-mexicano-800x445.jpg.webp", categoria:"clasicos", custom:(item)=>openExtraPapasModal(item) },
-        { id:"alambre_camaron", nombre:"Alambre de Camarón", precio:159, desc:"Camarones con morrón, cebolla, tocino, gratinado con queso, acompañado de puré de papa, frijoles, tortillas y salsa", img:"https://www.apega.pe/wp-content/uploads/2025/06/receta-de-alambre-mexicano-800x445.jpg.webp", categoria:"clasicos", custom:(item)=>openExtraPapasModal(item) },
-        { id:"tiras_pollo", nombre:"Tiras de Pechuga de Pollo Frito", precio:139, desc:"Acompañadas de puré de papa y ensalada tipo Kentucky.", img:"https://i.ytimg.com/vi/ZWYpwkrRiC8/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLCtwP7-pZqq-OBzIThBsZZwMdBd3A", categoria:"clasicos", custom:(item)=>openTirasPolloModal(item) },
-        // NUEVAS QUESADILLAS (se reemplazan las anteriores)
-        { id:"quesadilla_arrachera", nombre:"Quesadilla de Arrachera", precio:95, desc:"Quesadilla grande tipo sincronizada, acompañada con pico de gallo.", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR2D6fCxFFcr6pVFfL0A39SlU6FKxLXgSG9bA&s", categoria:"clasicos", custom:(item)=>openQuesadillaArracheraModal(item) },
-        { id:"quesadilla_pollo", nombre:"Quesadilla de Pollo", precio:79, desc:"Quesadilla grande tipo sincronizada, acompañada con pico de gallo. Elige tipo de pollo.", img:"https://www.vvsupremo.com/wp-content/uploads/2016/07/N-Bacon-Chicken-Quesadillas-900x570.jpg", categoria:"clasicos", custom:(item)=>openQuesadillaPolloModal(item) },
-        { id:"pechuga_rellena", nombre:"Pechuga Rellena", precio:159, desc:"Pechuga de pollo rellena de jamón con queso Y espinaca, bañada en crema, acompañada con puré de papa, vegetales y pan con ajo.", img:"https://i.ytimg.com/vi/S8IeMr7Rudg/maxresdefault.jpg", categoria:"clasicos", custom:(item)=>openPechugaRellenaModal(item) },
+        { id:"enchiladas_chipotle", nombre:"Enchiladas en Crema de Chipotle", precio:85, desc:"4 enchiladas banadas en crema de chipotle, acompanadas de ensalada.", img:"https://cdn.avena.io/avena-recipes-v2/2019/10/1571780027584.jpeg", categoria:"clasicos", custom:(item)=>openSimpleModal(item) },
+        { id:"alambre", nombre:"Alambre", precio:159, desc:"Carne de res con morron, cebolla, tocino, gratinado con queso, acompanado de pure de papa, frijoles, tortillas y salsa", img:"https://www.apega.pe/wp-content/uploads/2025/06/receta-de-alambre-mexicano-800x445.jpg.webp", categoria:"clasicos", custom:(item)=>openWithPapasOption(item) },
+        { id:"alambre_camaron", nombre:"Alambre de Camaron", precio:159, desc:"Camarones con morron, cebolla, tocino, gratinado con queso, acompanado de pure de papa, frijoles, tortillas y salsa", img:"https://www.apega.pe/wp-content/uploads/2025/06/receta-de-alambre-mexicano-800x445.jpg.webp", categoria:"clasicos", custom:(item)=>openWithPapasOption(item) },
+        { id:"tiras_pollo", nombre:"Tiras de Pechuga de Pollo Frito", precio:139, desc:"Acompanadas de pure de papa y ensalada tipo Kentucky.", img:"https://i.ytimg.com/vi/ZWYpwkrRiC8/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLCtwP7-pZqq-OBzIThBsZZwMdBd3A", categoria:"clasicos", custom:(item)=>openTirasPolloModal(item) },
+        { id:"quesadilla_arrachera", nombre:"Quesadilla de Arrachera", precio:95, desc:"Quesadilla grande tipo sincronizada, acompanada con pico de gallo.", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR2D6fCxFFcr6pVFfL0A39SlU6FKxLXgSG9bA&s", categoria:"clasicos", custom:(item)=>openQuesadillaArracheraModal(item) },
+        { id:"quesadilla_pollo", nombre:"Quesadilla de Pollo", precio:79, desc:"Quesadilla grande tipo sincronizada, acompanada con pico de gallo. Elige tipo de pollo.", img:"https://www.vvsupremo.com/wp-content/uploads/2016/07/N-Bacon-Chicken-Quesadillas-900x570.jpg", categoria:"clasicos", custom:(item)=>openQuesadillaPolloModal(item) },
+        { id:"pechuga_rellena", nombre:"Pechuga Rellena", precio:159, desc:"Pechuga de pollo rellena de jamon con queso, banada en crema, acompanada con pure de papa, vegetales y pan con ajo.", img:"https://i.ytimg.com/vi/S8IeMr7Rudg/maxresdefault.jpg", categoria:"clasicos", custom:(item)=>openPechugaRellenaModal(item) },
         { id:"pechuga_pollo", nombre:"Pechuga a la Plancha", precio:129, desc:"Con arroz, vegetales al vapor y pan con ajo.", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQF_z6BbHCC8XIJa7gK7tN_QfiGCWXFcKflSQ&s", categoria:"clasicos", custom:(item)=>openBBQModal(item) },
-        { id:"enchiladas_suizas", nombre:"Enchiladas Suizas", precio:85, desc:"4 enchiladas rellenas de pollo y queso, gratinadas con crema y salsa verde, acompañadas de ensalada", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMcpJC4dhxcI361dSYcZ-HhcbMpDEv-c-Lzw&s", categoria:"clasicos", custom:(item)=>openWithoutPapasOption }, // SIN PAPAS
-        { id:"enchiladas_rojas", nombre:"Enchiladas Rojas Mexicanas", precio:40, desc:"5 enchiladas rojas, con lechuga, chile en vinagre y papas", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSYzxfbqzlPzFmRoRoWXZpLolq_Q7btqxEyyA&s", categoria:"clasicos", custom:(item)=>openEnchiladasRojasModal(item) },
+        { id:"enchiladas_suizas", nombre:"Enchiladas Suizas", precio:85, desc:"4 enchiladas rellenas de pollo y queso, gratinadas con crema y salsa verde, acompanadas de ensalada", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMcpJC4dhxcI361dSYcZ-HhcbMpDEv-c-Lzw&s", categoria:"clasicos", custom:(item)=>openSimpleModal(item) },
+        { id:"enchiladas_rojas", nombre:"Enchiladas Rojas Mexicanas", precio:40, desc:"5 enchiladas rojas, con lechuga, chile en vinagre y papas", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSYzxfbqzlPzFmRoRoWXZpLolq_Q7btqxEyyA&s", categoria:"clasicos", custom:(item)=>openSimpleModal(item) },
         { id:"hamburguesa", nombre:"Hamburguesa", precio:79, desc:"Hamburguesa de pollo.", img:"https://comedera.com/wp-content/uploads/sites/9/2023/07/Hamburguesa-de-pollo-picante.jpg", categoria:"clasicos", custom:(item)=>openHamburguesaModal(item) },
-       
-        { id:"chilaquiles_verdes", nombre:"Chilaquiles Especiales (Verdes)", precio:95, desc:"Bien cargados, Elige tu Proteina, Bañados en Frijoles Enchipotlados, Gratinados con Queso, Crema, Con aguacate, Cebolla y Cilantro", img:"https://scontent.fqro3-1.fna.fbcdn.net/v/t39.30808-6/656452293_1607518970350983_3048921546084326662_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=7b2446&_nc_eui2=AeGtonwa6_p0fHKuZY6U0eLV8rCGy9Ia0pfysIbL0hrSl7HNN4q1G_2hLPNytizJxOWyguRy3Wdz_sAiF4NxdZ7N&_nc_ohc=Lo1ePRLPcbAQ7kNvwGTaeG4&_nc_oc=AdrHQx7TAkDWeiUfhO8Oh12em3DaCv_25qYoefQIPJI1hv1EgBiKPrRSvE1fHk0cvo0&_nc_zt=23&_nc_ht=scontent.fqro3-1.fna&_nc_gid=S2qaT9uESHSorQ1DJM4KCg&_nc_ss=7a3a8&oh=00_Af27rCrFtMXXo96OwsCwteFNaLnsQCHsWvZguPCFku5xfA&oe=69E83912", categoria:"desayunos", custom:(item)=>openChilaquilesModal(item, true) },
-        { id:"chilaquiles_rojos", nombre:"Chilaquiles Especiales (Rojos)", precio:95, desc:"Bien cargados, Elige tu Proteina, Bañados en Frijoles Enchipotlados, Gratinados con Queso, Crema, Con aguacate, Cebolla y Cilantro", img:"https://scontent.fqro3-1.fna.fbcdn.net/v/t39.30808-6/656452293_1607518970350983_3048921546084326662_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=7b2446&_nc_eui2=AeGtonwa6_p0fHKuZY6U0eLV8rCGy9Ia0pfysIbL0hrSl7HNN4q1G_2hLPNytizJxOWyguRy3Wdz_sAiF4NxdZ7N&_nc_ohc=Lo1ePRLPcbAQ7kNvwGTaeG4&_nc_oc=AdrHQx7TAkDWeiUfhO8Oh12em3DaCv_25qYoefQIPJI1hv1EgBiKPrRSvE1fHk0cvo0&_nc_zt=23&_nc_ht=scontent.fqro3-1.fna&_nc_gid=S2qaT9uESHSorQ1DJM4KCg&_nc_ss=7a3a8&oh=00_Af27rCrFtMXXo96OwsCwteFNaLnsQCHsWvZguPCFku5xfA&oe=69E83912", categoria:"desayunos", custom:(item)=>openChilaquilesModal(item, false) },
-        // BURRITO ELIMINADO
-        { id:"huevos_gusto", nombre:"Huevos al Gusto", precio:65, desc:"Elige tu estilo, acompañados con frijoles en chipotle, una rebanada de queso panela, salsa y tortillas.", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5XN3JJB8lJKrTDkLJEpiLd1IL_FlE0xEKSQ&s", categoria:"desayunos", custom:(item)=>openHuevosModal(item) },
-        { id:"coctel_tropical", nombre:"Coctel de Frutas", precio:50, desc:"Melón, papaya, manzana, fresas - Elige topping", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZ_lT_0skxR0WBLqUkRmMBmgOjnlHl5SGjlQ&s", categoria:"desayunos", custom:(item)=>openCoctelTropicalModal(item) },
-        { id:"coctel_fresco", nombre:"Coctel de Frutas Fresco", precio:50, desc:"Sandía, piña, jícama, pepino - Elige sazón", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTtFUOZe8j8mTgBkgVuytR_SW4Hy4Iv3xBzw&s", categoria:"desayunos", custom:(item)=>openCoctelFrescoModal(item) },
-        { id:"menudo", nombre:"Menudo SOLO LOS DOMINGOS (Por Litro)", precio:120, desc:"Solo domingos, acompañado de tortillas.", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXOT-6-I-mP9Vtvo7YrX_ZHuWE3uF2Gyu6mw&s", categoria:"desayunos" },
-        { id:"hot_cakes", nombre:"Hot Cakes con Fruta", precio:65, desc:"3 hot cakes con platano, fresas y mermelada de frutos rojos", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSVShdhlDtLaiIMkd20FXTV8TIfnuSxJwqkSw&s", categoria:"desayunos" },
+        { id:"cordon_bleu", nombre:"Cordon Bleu", precio:169, desc:"Pechuga de pollo empanizada, enrollada y rellena de jamon con queso tipo manchego, acompanada de pan con ajo, una papa rellena, ensalada de lechuga, morron, cebolla, zanahoria y ligeramente banada en crema de chipotle.", img:"https://d1uz88p17r663j.cloudfront.net/original/d6da8de8b1f6b46563028fd60ec835ff_PECHUGA_CORDON_BLEU_CON_SALSA_3_CHILES_-_EMPANIZADO_POLLO.jpg", categoria:"clasicos", custom:(item)=>openWithPapasOption(item) },
+        { id:"fajitas_pollo_tocino", nombre:"Fajitas de Pollo con Tocino", precio:159, desc:"Pure y ensalada, pan de ajo.", img:"https://images.ctfassets.net/ttw7uwgviuml/4hjAMvbSdH4lVuMYXwimau/87651fe4f40cfe5444c603f54627a8c2/fajitas-estilo-oriental.jpg", categoria:"clasicos", custom:(item)=>openWithPapasOption(item) },
+        { id:"tostadas_camaron", nombre:"Tostadas de Camaron", precio:135, desc:"2 tostadas por orden - En salsa de chipotle y chile guajillo.", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdSqwhzeCIv6z3QiYoM_jl9wHmfVC_saRTGQ&s", categoria:"clasicos", custom:(item)=>openSimpleModal(item) },
+        
+        // DESAYUNOS NUEVOS
+        { id:"sandwich_clasico", nombre:"Sandwich Clasico", precio:70, desc:"Jamon de pavo, queso, aguacate, lechuga, jitomate, cebolla y chile, acompanado de papas a la francesa.", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT03mItSWOBagD2LDpHEhSGAtAeDBnz89RoNQ&s", categoria:"desayunos", custom:(item)=>openBreakfastWithOptions(item, null) },
+        { id:"sandwich_3quesos", nombre:"Sandwich 3 Quesos", precio:70, desc:"3 quesos, tocino y capeado con huevo, acompanado de papas a la francesa.", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRpM041YrVkkCOG_R4LT90o6svW0hKaxqTheg&s", categoria:"desayunos", custom:(item)=>openBreakfastWithOptions(item, null) },
+        { id:"big_sandwich", nombre:"Big Sandwich", precio:85, desc:"Huevo, queso, pechuga a la plancha en salsa Buffalo o BBQ, lechuga, pepino, jitomate, cebolla y aguacate, acompanado de papas a la francesa.", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQsrVPTIcvWod5CjSYPm3Uw22sDuvJY47PHZA&s", categoria:"desayunos", custom:(item)=>openBigSandwichModal(item) },
+        { id:"huevos_americanos", nombre:"Huevos Americanos", precio:85, desc:"2 huevos revueltos, 2 hot cakes, rollo de jamon y tocino.", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6-19Aceppe0cNWnnR8-5EgDAFOPOiWk_FMw&s", categoria:"desayunos", custom:(item)=>openBreakfastWithOptions(item, null) },
+        { id:"burrito", nombre:"Burrito", precio:85, desc:"Frijoles, huevo, queso, acompanados con ensalada, aguacate y tocino.", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6mcRjh7mvs-3Uw0JIlibrMBsWbkTNnu1PPA&s", categoria:"desayunos", custom:(item)=>openBreakfastWithOptions(item, null) },
+        { id:"burrito_arrachera", nombre:"Burrito Arrachera", precio:95, desc:"Arrachera, frijoles, queso, acompanados con ensalada y aguacate.", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-QAPAZroImTGUlhHsdZdZq_oi8csyKMV3sg&s", categoria:"desayunos", custom:(item)=>openBreakfastWithOptions(item, null) },
+        { id:"burrito_pollo", nombre:"Burrito Pollo", precio:95, desc:"Pollo a la plancha, frijoles, queso, acompanados con ensalada y aguacate.", img:"https://i.ytimg.com/vi/H8P6Lcy1cPE/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLDivcvPa8a9wMdXsICMWjS1PCPvTA", categoria:"desayunos", custom:(item)=>openBreakfastWithOptions(item, null) },
+        { id:"chilaquiles_verdes", nombre:"Chilaquiles Especiales (Verdes)", precio:95, desc:"Bien cargados, Elige tu Proteina, Banados en Frijoles Enchipotlados, Gratinados con Queso, Crema, Con aguacate, Cebolla y Cilantro", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEBrsgxWvOgKx3HLjJhKv07a0rv_7_QqQOsg&s", categoria:"desayunos", custom:(item)=>openChilaquilesWithOptions(item, true) },
+        { id:"chilaquiles_rojos", nombre:"Chilaquiles Especiales (Rojos)", precio:95, desc:"Bien cargados, Elige tu Proteina, Banados en Frijoles Enchipotlados, Gratinados con Queso, Crema, Con aguacate, Cebolla y Cilantro", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEBrsgxWvOgKx3HLjJhKv07a0rv_7_QqQOsg&s", categoria:"desayunos", custom:(item)=>openChilaquilesWithOptions(item, false) },
+        { id:"huevos_gusto", nombre:"Huevos al Gusto", precio:65, desc:"Elige tu estilo, acompanados con frijoles en chipotle, una rebanada de queso panela, salsa y tortillas.", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5XN3JJB8lJKrTDkLJEpiLd1IL_FlE0xEKSQ&s", categoria:"desayunos", custom:(item)=>openHuevosModal(item) },
+        { id:"coctel_tropical", nombre:"Coctel de Frutas Tropical", precio:50, desc:"Melon, papaya, manzana, fresas - Elige topping", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZ_lT_0skxR0WBLqUkRmMBmgOjnlHl5SGjlQ&s", categoria:"desayunos", custom:(item)=>openSimpleModal(item) },
+        { id:"coctel_fresco", nombre:"Coctel de Frutas Fresco", precio:50, desc:"Sandia, pina, jicama, pepino - Elige sazon", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTtFUOZe8j8mTgBkgVuytR_SW4Hy4Iv3xBzw&s", categoria:"desayunos", custom:(item)=>openSimpleModal(item) },
+        { id:"menudo", nombre:"Menudo, Solo Domingos (Por Litro)", precio:120, desc:"Solo domingos, acompanado de tortillas.", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXOT-6-I-mP9Vtvo7YrX_ZHuWE3uF2Gyu6mw&s", categoria:"desayunos", custom:(item)=>openSimpleModal(item) },
+        { id:"hot_cakes", nombre:"Hot Cakes con Fruta", precio:65, desc:"3 hot cakes con platano, fresas y mermelada de frutos rojos", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSVShdhlDtLaiIMkd20FXTV8TIfnuSxJwqkSw&s", categoria:"desayunos", custom:(item)=>openSimpleModal(item) },
+        
         // PASTAS
-        { id:"pasta_poblano", nombre:"Pasta Poblano", precio:89, desc:"Pasta en crema de poblano - Elige proteína extra", img:"https://cocinamia.com.mx/wp-content/uploads/2020/02/c-02-1100x500.png", categoria:"pastas", custom:(item)=>openPastaModal(item, "poblano") },
-        { id:"pasta_chipotle", nombre:"Pasta Chipotle", precio:79, desc:"Pasta en crema de chipotle - Elige proteína extra", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTthI5vpI7MX0zmkV7gGwlqwcFAMB-nPN5r7A&s", categoria:"pastas", custom:(item)=>openPastaModal(item, "chipotle") },
-        { id:"pasta_elote", nombre:"Pasta Elote", precio:79, desc:"Pasta en crema de elote - Elige proteína extra", img:"https://editorialtelevisa.brightspotcdn.com/wp-content/uploads/2021/02/pasta-con-crema-de-elote-y-poblano.jpg", categoria:"pastas", custom:(item)=>openPastaModal(item, "elote") },
-        { id:"pasta_champinon", nombre:"Pasta Champiñón", precio:79, desc:"Pasta en crema de champiñón - Elige proteína extra", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLs0HAO4uRWLGNUTzxUnB-EYz0qJ3f29ccLQ&s", categoria:"pastas", custom:(item)=>openPastaModal(item, "champinon") },
-        { id:"pasta_bolognesa", nombre:"Pasta Boloñesa", precio:110, desc:"Pasta con carne molida en salsa boloñesa, acompañada con pan de ajo", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDqj82r6QgMbJz-_FfKc6XmCxP3VH_i3ofEA&s", categoria:"pastas", custom:(item)=>openPastaBolognesaModal(item) },
+        { id:"pasta_poblano", nombre:"Pasta Poblano", precio:89, desc:"Pasta en crema de poblano - Elige proteina extra", img:"https://cocinamia.com.mx/wp-content/uploads/2020/02/c-02-1100x500.png", categoria:"pastas", custom:(item)=>openPastaModal(item, "poblano") },
+        { id:"pasta_chipotle", nombre:"Pasta Chipotle", precio:79, desc:"Pasta en crema de chipotle - Elige proteina extra", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTthI5vpI7MX0zmkV7gGwlqwcFAMB-nPN5r7A&s", categoria:"pastas", custom:(item)=>openPastaModal(item, "chipotle") },
+        { id:"pasta_elote", nombre:"Pasta Elote", precio:79, desc:"Pasta en crema de elote - Elige proteina extra", img:"https://editorialtelevisa.brightspotcdn.com/wp-content/uploads/2021/02/pasta-con-crema-de-elote-y-poblano.jpg", categoria:"pastas", custom:(item)=>openPastaModal(item, "elote") },
+        { id:"pasta_champinon", nombre:"Pasta Champinon", precio:79, desc:"Pasta en crema de champinon - Elige proteina extra", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLs0HAO4uRWLGNUTzxUnB-EYz0qJ3f29ccLQ&s", categoria:"pastas", custom:(item)=>openPastaModal(item, "champinon") },
+        { id:"pasta_bolognesa", nombre:"Pasta Bolognesa", precio:110, desc:"Pasta con carne molida en salsa bolognesa, acompanada con pan de ajo", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDqj82r6QgMbJz-_FfKc6XmCxP3VH_i3ofEA&s", categoria:"pastas", custom:(item)=>openSimpleModal(item) },
+        
         // MARISCOS & CAMARONES
-        { id:"camarones_enchilados", nombre:"Camarones para Pelar Enchilados", precio:195, desc:"Camarones enchilados acompañados de guacamole, arroz y pan de ajo.", img:"https://i.ytimg.com/vi/rFCTMQfI-uY/maxresdefault.jpg", categoria:"mariscos", custom:(item)=>openExtraPapasModal(item) },
-        { id:"camarones_plancha", nombre:"Camarones a la Plancha", precio:185, desc:"Camarones a la plancha, acompañados de arroz, ensalada y pan de ajo.", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUNEeCYWfJyTSlEcdvKzqV2830YLjKUNtgsA&s", categoria:"mariscos", custom:(item)=>openExtraPapasModal(item) },
-        { id:"camarones_diabla", nombre:"Camarones a la Diabla", precio:195, desc:"Camarones en salsa diabla, acompañados de arroz, ensalada y pan de ajo.", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTehe7EVgBCeaPeoqI1b7Qai6kHFJ0bEsjRlw&s", categoria:"mariscos", custom:(item)=>openExtraPapasModal(item) },
-        { id:"camarones_empanizados", nombre:"Camarones Empanizados", precio:179, desc:"Camarones empanizados, acompañados de arroz, ensalada y aderezo de chipotle.", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTpYqxVQHrOwEFJkWlVxoturaj9qjX3w-2yVA&s", categoria:"mariscos", custom:(item)=>openExtraPapasModal(item) },
-        { id:"caldo_camaron", nombre:"Caldo de Camarón", precio:159, desc:"Plato de caldo de camarón con verduras, acompañado de tortillas.", img:"https://images.aws.nestle.recipes/original/435ef0acc8c2ee9ad42116446a237edd_CALDO_DE_CAMAR%C3%93N_150.jpg", categoria:"mariscos", custom:(item)=>openWithoutPapasOption }, // SIN PAPAS
-        { id:"salmon", nombre:"Salmón", precio:240, desc:"Salmón a la plancha sobre cama de arroz blanco, hierbas finas, acompañado de brócoli, aguacate y pan con ajo.", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRw2NgVXLsHj9x20bEVr6QtURE5MbTwxA4fKQ&s", categoria:"mariscos", custom:(item)=>openExtraPapasModal(item) },
-        { id:"filete_pescado_vapor", nombre:"Filete de Tilapia al Vapor", precio:139, desc:"Filete de pescado cocido al vapor, con hierbas finas, acompañado de vegetales, arroz y pan con ajo.", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEj6xXtyfMWzjFmoxzRWFJGBGjBQz8FkgIAg&s", categoria:"mariscos", custom:(item)=>openExtraPapasModal(item) },
-        { id:"ceviche_blanco_pescado", nombre:"Ceviche Blanco de Pescado", precio:85, desc:"Acompañado con tostadas", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2JbSiiP1xkIWIF7WvFwWZJJ6PWtC49aH8oA&s", categoria:"mariscos", custom:(item)=>openCevicheBlancoPescadoModal(item) },
-        { id:"ceviche_habanero", nombre:"Ceviche de Camarón en Salsa de Habanero", precio:130, desc:"Ceviche fresco con tostadas, salsa de habanero al gusto", img:"https://sp-ao.shortpixel.ai/client/to_auto,q_glossy,ret_img,w_1024,h_788/https://www.tacosrecetas.com/wp-content/uploads/2021/08/coctel-camaron-receta-1024x788.jpg", categoria:"mariscos", custom:(item)=>openCevicheModal(item) },
-        { id:"coctel_camaron", nombre:"Coctel de Camarón", precio:130, desc:"Camarones frescos con salsa cocktail, acompañado de galletas saladas", img:"https://pinaenlacocina.com/wp-content/uploads/2014/01/IMG_20180422_165323.jpg", categoria:"mariscos", custom:(item)=>openCoctelModal(item) },
+        { id:"camarones_enchilados", nombre:"Camarones para Pelar Enchilados", precio:195, desc:"Camarones enchilados acompanados de guacamole, arroz y pan de ajo.", img:"https://i.ytimg.com/vi/rFCTMQfI-uY/maxresdefault.jpg", categoria:"mariscos", custom:(item)=>openWithPapasOption(item) },
+        { id:"camarones_plancha", nombre:"Camarones a la Plancha", precio:185, desc:"Camarones a la plancha, acompanados de arroz, ensalada y pan de ajo.", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUNEeCYWfJyTSlEcdvKzqV2830YLjKUNtgsA&s", categoria:"mariscos", custom:(item)=>openWithPapasOption(item) },
+        { id:"camarones_diabla", nombre:"Camarones a la Diabla", precio:195, desc:"Camarones en salsa diabla, acompanados de arroz, ensalada y pan de ajo.", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTehe7EVgBCeaPeoqI1b7Qai6kHFJ0bEsjRlw&s", categoria:"mariscos", custom:(item)=>openWithPapasOption(item) },
+        { id:"camarones_empanizados", nombre:"Camarones Empanizados", precio:179, desc:"Camarones empanizados, acompanados de arroz, ensalada y aderezo de chipotle.", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTpYqxVQHrOwEFJkWlVxoturaj9qjX3w-2yVA&s", categoria:"mariscos", custom:(item)=>openWithPapasOption(item) },
+        { id:"caldo_camaron", nombre:"Caldo de Camaron", precio:159, desc:"Plato de caldo de camaron con verduras, acompanado de tortillas.", img:"https://images.aws.nestle.recipes/original/435ef0acc8c2ee9ad42116446a237edd_CALDO_DE_CAMAR%C3%93N_150.jpg", categoria:"mariscos", custom:(item)=>openSimpleModal(item) },
+        { id:"salmon", nombre:"Salmon", precio:240, desc:"Salmon a la plancha sobre cama de arroz blanco, hierbas finas, acompanado de brocoli, aguacate y pan con ajo.", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRw2NgVXLsHj9x20bEVr6QtURE5MbTwxA4fKQ&s", categoria:"mariscos", custom:(item)=>openSimpleModal(item) },
+        { id:"filete_pescado_vapor", nombre:"Filete de Tilapia al Vapor", precio:139, desc:"Filete de pescado cocido al vapor, con hierbas finas, acompanado de vegetales, arroz y pan con ajo.", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEj6xXtyfMWzjFmoxzRWFJGBGjBQz8FkgIAg&s", categoria:"mariscos", custom:(item)=>openWithPapasOption(item) },
+        { id:"ceviche_blanco_pescado", nombre:"Ceviche Blanco de Pescado", precio:85, desc:"Acompanado con tostadas", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2JbSiiP1xkIWIF7WvFwWZJJ6PWtC49aH8oA&s", categoria:"mariscos", custom:(item)=>openCevicheBlancoPescadoModal(item) },
+        { id:"ceviche_habanero", nombre:"Ceviche de Camaron en Salsa de Habanero", precio:130, desc:"Ceviche fresco con tostadas, salsa de habanero al gusto", img:"https://sp-ao.shortpixel.ai/client/to_auto,q_glossy,ret_img,w_1024,h_788/https://www.tacosrecetas.com/wp-content/uploads/2021/08/coctel-camaron-receta-1024x788.jpg", categoria:"mariscos", custom:(item)=>openCevicheModal(item) },
+        { id:"coctel_camaron", nombre:"Coctel de Camaron", precio:130, desc:"Camarones frescos con salsa cocktail, acompanado de galletas saladas", img:"https://pinaenlacocina.com/wp-content/uploads/2014/01/IMG_20180422_165323.jpg", categoria:"mariscos", custom:(item)=>openCoctelModal(item) },
+        
         // TACOS
-        { id:"tacos", nombre:"Tacos", precio:0, desc:"Elige tus tacos y complementos. Acompañados de cebolla asada", img:"https://cdn.nutritionstudies.org/wp-content/uploads/2023/03/chipotle-mushroom-tacos-1024x683.jpg", categoria:"tacos", custom:(item)=>openTacosModal() },
-        // TORTAS (con papas) - PIERNA AHUMADA ELIMINADA
+        { id:"tacos", nombre:"Tacos", precio:0, desc:"Elige tus tacos y complementos. Acompanados de cebolla asada", img:"https://cdn.nutritionstudies.org/wp-content/uploads/2023/03/chipotle-mushroom-tacos-1024x683.jpg", categoria:"tacos", custom:(item)=>openTacosModal() },
+        
+        // TORTAS
         { id:"tortas", nombre:"Torta", precio:55, desc:"Elige tu torta.", img:"https://www.unileverfoodsolutions.com.mx/dam/global-ufs/mcos/NOLA/calcmenu/recipes/MX-recipes/torta-cubana/torta.jpg", categoria:"tortas", custom:(item)=>openTortaModal(item) },
+        
+        // POSTRES NUEVOS
+        { id:"pan_frances", nombre:"Pan Frances", precio:69, desc:"2 panes franceses con helado. Elige sabor de helado y bano.", img:"https://elhornodelucas.com/wp-content/uploads/2012/04/Pan-frances-con-helado.jpg", categoria:"postres", custom:(item)=>openPostreModal(item) },
+        { id:"rollos_canela", nombre:"Rollos de Canela", precio:69, desc:"4 rollos de canela con helado, rellenos de Nutella. Elige sabor de helado y bano.", img:"https://i.ytimg.com/vi/G3lGJBtsqu8/maxresdefault.jpg", categoria:"postres", custom:(item)=>openPostreModal(item) },
+        { id:"coctel_cremoso", nombre:"Coctel Cremoso", precio:55, desc:"Con nuez, manzana y frutas de temporada.", img:"https://7diasdesabor.com/wp-content/uploads/2023/09/POSTRE-2.jpg", categoria:"postres", custom:(item)=>openSimpleModal(item) },
+        { id:"helado_napolitano", nombre:"Helado Napolitano Preparado", precio:55, desc:"Delicioso helado napolitano preparado.", img:"https://www.gastrolabweb.com/u/fotografias/m/2022/7/16/f1280x720-32196_163871_4256.jpg", categoria:"postres", custom:(item)=>openSimpleModal(item) },
+        
         // ACOMPAÑAMIENTOS
-        { id:"papas_fritas", nombre:"Papas Fritas", precio:50, desc:"Crujientes papas a la francesa", img:"https://images.unsplash.com/photo-1630384060421-cb20d0e0649d?w=300&h=200&fit=crop", categoria:"otros" },
-        { id:"papas_pollo", nombre:"Papas con Pollo", precio:95, desc:"Papas con trocitos de pollo empanizado", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8HYQMILNcZ-b0rx4q7N0-bU-YU978YY4l-g&s", categoria:"otros" },
-        // BEBIDAS
-        { id:"cocacola", nombre:"Coca-Cola", precio:27, desc:"Lata 600 ml bien fría", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGTf9aUTctNTXvv5A3yXuhJ-JWA6DnrhJvew&s", categoria:"bebidas" },
-        { id:"sprite", nombre:"Sprite", precio:25, desc:"Lata 600 ml, sabor cítrico", img:"https://calimaxmx.vtexassets.com/arquivos/ids/203614-800-450?v=638065795193000000&width=800&height=450&aspect=true", categoria:"bebidas" },
-        { id:"fanta", nombre:"Sidral Manzana", precio:25, desc:"Lata 600 ml, refrescante", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRI6_l42bsxoTs4eSCZbz6JUJvN1XIWCqwhiw&s", categoria:"bebidas" },
-        { id:"agua_natural", nombre:"Agua Natural", precio:20, desc:"Botella 1 Litro", img:"https://okuma.com.mx/wp-content/uploads/2022/09/3.jpg", categoria:"bebidas" },
-        { id:"agua_sabor", nombre:"Agua de sabor", precio:39, desc:"1 litro - Agua del día / sabor variable", img:"https://www.codigosanluis.com/wp-content/uploads/AGUAS.jpg", categoria:"bebidas" },
-        { id:"te_helado", nombre:"Té helado", precio:32, desc:"1/2 litro - Refrescante té preparado", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTeGPTp7Z91TcTF0bIvm_xcRXANV8Hq79LVHQ&s", categoria:"bebidas" }
+        { id:"papas_fritas", nombre:"Papas Fritas", precio:50, desc:"Crujientes papas a la francesa", img:"https://images.unsplash.com/photo-1630384060421-cb20d0e0649d?w=300&h=200&fit=crop", categoria:"otros", custom:(item)=>openSimpleModal(item) },
+        { id:"papas_pollo", nombre:"Papas con Pollo", precio:95, desc:"Papas con trocitos de pollo empanizado", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8HYQMILNcZ-b0rx4q7N0-bU-YU978YY4l-g&s", categoria:"otros", custom:(item)=>openSimpleModal(item) },
+        
+        // BEBIDAS NUEVAS
+        { id:"cocacola", nombre:"Coca-Cola", precio:27, desc:"Lata 600 ml bien fria", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGTf9aUTctNTXvv5A3yXuhJ-JWA6DnrhJvew&s", categoria:"bebidas", custom:(item)=>openSimpleModal(item) },
+        { id:"sprite", nombre:"Sprite", precio:25, desc:"Lata 600 ml, sabor citrico", img:"https://calimaxmx.vtexassets.com/arquivos/ids/203614-800-450?v=638065795193000000&width=800&height=450&aspect=true", categoria:"bebidas", custom:(item)=>openSimpleModal(item) },
+        { id:"fanta", nombre:"Sidral Manzana", precio:25, desc:"Lata 600 ml, refrescante", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRI6_l42bsxoTs4eSCZbz6JUJvN1XIWCqwhiw&s", categoria:"bebidas", custom:(item)=>openSimpleModal(item) },
+        { id:"agua_natural", nombre:"Agua Natural", precio:20, desc:"Botella 1 Litro", img:"https://okuma.com.mx/wp-content/uploads/2022/09/3.jpg", categoria:"bebidas", custom:(item)=>openSimpleModal(item) },
+        { id:"agua_sabor", nombre:"Agua de sabor", precio:39, desc:"1 litro - Agua del dia / sabor variable", img:"https://www.codigosanluis.com/wp-content/uploads/AGUAS.jpg", categoria:"bebidas", custom:(item)=>openSimpleModal(item) },
+        { id:"te_helado", nombre:"Te helado", precio:32, desc:"1/2 litro - Refrescante te preparado", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTeGPTp7Z91TcTF0bIvm_xcRXANV8Hq79LVHQ&s", categoria:"bebidas", custom:(item)=>openSimpleModal(item) },
+        { id:"limonada", nombre:"Limonada", precio:45, desc:"Refrescante limonada natural", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrJG9LkODHmYWVx13R2i6VncSEQ6pgDMv8cQ&s", categoria:"bebidas", custom:(item)=>openSimpleModal(item) },
+        { id:"naranjada", nombre:"Naranjada", precio:45, desc:"Naranjada natural", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRT6KYfw-0MfGPU_MGZdE2kWKrkVS1CXuRmjw&s", categoria:"bebidas", custom:(item)=>openSimpleModal(item) },
+        { id:"malteada_vainilla", nombre:"Malteada de Vainilla", precio:55, desc:"Con helado - Selector de leche entera o deslactosada", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTAsqqbqoFB8J05vRU9n9EMvAgeIq0ZV0jC7w&s", categoria:"bebidas", custom:(item)=>openMalteadaModal(item, "Vainilla") },
+        { id:"malteada_chocolate", nombre:"Malteada de Chocolate", precio:55, desc:"Con helado - Selector de leche entera o deslactosada", img:"https://www.recetasnestle.com.mx/sites/default/files/srh_recipes/2be65986fc0d61a9d40c3d3c50b85cea.jpg", categoria:"bebidas", custom:(item)=>openMalteadaModal(item, "Chocolate") },
+        { id:"malteada_fresa", nombre:"Malteada de Fresa", precio:55, desc:"Con helado - Selector de leche entera o deslactosada", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5tHj3RbwMUFK2LENfQU4nhN-VY-A4rZw7JQ&s", categoria:"bebidas", custom:(item)=>openMalteadaModal(item, "Fresa") },
+        { id:"cafe_clasico", nombre:"Cafe Clasico Nescafe", precio:30, desc:"Selector de crema y azucar", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLaGULZW5JnfBgLKKdtKHcdUmwlJT7cx2w6g&s", categoria:"bebidas", custom:(item)=>openCafeModal() },
+        { id:"capuchino", nombre:"Capuchino", precio:45, desc:"Selector de azucar", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCQTSBcnRTdy9niJl7sn9cWHK9iIg-VULZyQ&s", categoria:"bebidas", custom:(item)=>openCapuchinoModal() },
+        { id:"chocolate_caliente", nombre:"Chocolate Caliente", precio:35, desc:"Selector de leche entera o deslactosada", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqS2os8EZp3Q8ZyQjs3Vf6ZhPQ2v-WAWE0aQ&s", categoria:"bebidas", custom:(item)=>openChocolateCalienteModal() }
     ];
 
     function renderFullMenu(){
-        const grids={clasicos:document.getElementById("gridClasicos"),desayunos:document.getElementById("gridDesayunos"),pastas:document.getElementById("gridPastas"),mariscos:document.getElementById("gridMariscos"),tacos:document.getElementById("gridTacos"),tortas:document.getElementById("gridTortas"),ensaladas:document.getElementById("gridEnsaladas"),otros:document.getElementById("gridOtros"),bebidas:document.getElementById("gridBebidas")};
+        const grids={clasicos:document.getElementById("gridClasicos"),desayunos:document.getElementById("gridDesayunos"),pastas:document.getElementById("gridPastas"),mariscos:document.getElementById("gridMariscos"),tacos:document.getElementById("gridTacos"),tortas:document.getElementById("gridTortas"),ensaladas:document.getElementById("gridEnsaladas"),postres:document.getElementById("gridPostres"),otros:document.getElementById("gridOtros"),bebidas:document.getElementById("gridBebidas")};
         Object.values(grids).forEach(g=>{if(g)g.innerHTML="";});
         menuItems.forEach(item=>{
             const card=document.createElement("div"); card.className="dish-card";
@@ -890,13 +1358,7 @@
             card.innerHTML=`<img class="dish-img" src="${item.img}" alt="${item.nombre}" loading="lazy" onerror="this.src='https://placehold.co/200x200/2c2c2c/white?text=Comida'"><div class="dish-info"><div class="dish-name">${item.nombre}</div><div class="dish-price">${displayPrice}</div><div class="dish-desc">${item.desc}</div><button class="btn-add" data-id="${item.id}"><i class="fas fa-cart-plus"></i> Agregar</button></div>`;
             const btn=card.querySelector(".btn-add");
             if(item.custom && typeof item.custom === 'function') {
-                if(item.id === "chiles_rellenos" || item.id === "enchiladas_chipotle" || item.id === "enchiladas_suizas" || item.id === "caldo_camaron") {
-                    btn.onclick=()=>openWithoutPapasOption(item);
-                } else {
-                    btn.onclick=()=>item.custom(item);
-                }
-            } else if(item.custom === openWithoutPapasOption) {
-                btn.onclick=()=>openWithoutPapasOption(item);
+                btn.onclick=()=>item.custom(item);
             } else {
                 btn.onclick=()=>addToCartCustom({ id:item.id+"_"+Date.now(), nombre:item.nombre + " - " + item.desc, precio:item.precio, cantidad:1 });
             }
@@ -906,11 +1368,13 @@
             else if(item.categoria==="mariscos") grids.mariscos.appendChild(card);
             else if(item.categoria==="tacos") grids.tacos.appendChild(card);
             else if(item.categoria==="tortas") grids.tortas.appendChild(card);
+            else if(item.categoria==="ensaladas") grids.ensaladas.appendChild(card);
+            else if(item.categoria==="postres") grids.postres.appendChild(card);
             else if(item.categoria==="otros") grids.otros.appendChild(card);
             else if(item.categoria==="bebidas") grids.bebidas.appendChild(card);
         });
         const saladCard=document.createElement("div"); saladCard.className="dish-card";
-        saladCard.innerHTML=`<img class="dish-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnUIie5X03BI0y2uENFJS-4K9MFLkWPGChwQ&s" alt="Ensalada"><div class="dish-info"><div class="dish-name">Ensalada Personalizada</div><div class="dish-price">Desde $89</div><div class="dish-desc">Elige hasta 6 ingredientes y proteína extra</div><button class="btn-add btn-customize-salad" id="openEnsaladaBtn"><i class="fas fa-cart-plus"></i> Personalizar</button></div>`;
+        saladCard.innerHTML=`<img class="dish-img" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnUIie5X03BI0y2uENFJS-4K9MFLkWPGChwQ&s" alt="Ensalada"><div class="dish-info"><div class="dish-name">Ensalada Personalizada</div><div class="dish-price">Desde $89</div><div class="dish-desc">Elige hasta 6 ingredientes y proteina extra</div><button class="btn-add btn-customize-salad" id="openEnsaladaBtn"><i class="fas fa-cart-plus"></i> Personalizar</button></div>`;
         saladCard.querySelector("#openEnsaladaBtn").onclick=()=>openEnsaladaModal();
         grids.ensaladas.appendChild(saladCard);
     }
@@ -935,8 +1399,8 @@
     
     document.getElementById("modalTipoPedido").addEventListener("change", function() {
         const domicilioField = document.getElementById("modalDomicilio");
-        if(this.value === "domicilio") { domicilioField.placeholder = "Dirección completa *"; domicilioField.style.borderColor = "#333"; }
-        else { domicilioField.placeholder = "Dirección (no requerida para recoger en local)"; domicilioField.style.borderColor = "#333"; }
+        if(this.value === "domicilio") { domicilioField.placeholder = "Direccion completa *"; domicilioField.style.borderColor = "#333"; }
+        else { domicilioField.placeholder = "Direccion (no requerida para recoger en local)"; domicilioField.style.borderColor = "#333"; }
     });
     
     renderFullMenu(); loadCart();
