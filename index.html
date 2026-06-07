@@ -425,7 +425,7 @@
         if (customConfig) { innerHtml += customConfig.html; }
         
         // Papas extra (si aplica)
-        const noPapasItems = ["sandwich_clasico", "sandwich_3quesos", "big_sandwich", "huevos_americanos", "hot_cakes"];
+        const noPapasItems = ["sandwich_clasico", "sandwich_3quesos", "big_sandwich", "huevos_americanos", "hot_cakes", "huevos_gusto"];
         if (!noPapasItems.includes(baseItem.id)) {
             innerHtml += `<div class="option-group"><label class="option-label">Agregar papas extra</label><div class="radio-group"><label><input type="radio" name="papas" value="no" checked> Sin papas</label><label><input type="radio" name="papas" value="si"> Papas extra (+$30)</label></div></div>`;
         }
@@ -872,13 +872,14 @@
         updatePrice();
     }
 
-    // Huevos al gusto con estilo
+    // Huevos al gusto con estilo (PRECIO ACTUALIZADO A 75)
     function openHuevosModal(baseItem) {
         let selectedEstilo = "estrellados";
         let estiloMap = { estrellados: "Estrellados", revueltos: "Revueltos", mexicanos: "A la Mexicana", con_jamon: "Con Jamon", rancheros: "Rancheros" };
-        openBreakfastWithOptions(baseItem, {
+        // Reutilizamos la función de desayunos, pero sobrescribiendo el precio a 75
+        openBreakfastWithOptions({...baseItem, precio: 75}, {
             html: `<div class="option-group"><label class="option-label">Elige tu estilo</label><div class="radio-group"><label><input type="radio" name="estilo" value="estrellados" checked> Estrellados</label><label><input type="radio" name="estilo" value="revueltos"> Revueltos</label><label><input type="radio" name="estilo" value="mexicanos"> A la Mexicana</label><label><input type="radio" name="estilo" value="con_jamon"> Con Jamon</label><label><input type="radio" name="estilo" value="rancheros"> Rancheros</label></div></div>`,
-            getCustomization: () => ({ name: `Huevos ${estiloMap[selectedEstilo]}`, price: 65 }),
+            getCustomization: () => ({ name: `Huevos ${estiloMap[selectedEstilo]}`, price: 75 }),
             init: () => { document.querySelectorAll('input[name="estilo"]').forEach(r => r.onchange = () => { selectedEstilo = r.value; }); }
         });
     }
@@ -909,7 +910,7 @@
         };
     }
 
-    // Pastas con proteina
+    // Pastas con proteina (CORREGIDO: usa baseItem.precio)
     function openPastaModal(baseItem, cremaBase) {
         let selectedProteina = "ninguna";
         let proteinaMap = { arrachera: "Arrachera +$30", camaron: "Camaron +$30", pollo_empanizado: "Pollo empanizado +$20", pollo_plancha: "Pollo a la plancha +$20" };
@@ -925,7 +926,7 @@
         document.getElementById("customizeModal").classList.add("active");
         document.getElementById("closeCustomModal").onclick = () => document.getElementById("customizeModal").classList.remove("active");
         
-        let basePrice = 79;
+        let basePrice = baseItem.precio; // AHORA USA EL PRECIO CORRECTO DEL PLATILLO
         const priceSpan = document.getElementById("pricePreview");
         const proteinaRadios = document.querySelectorAll('input[name="proteina"]');
         
@@ -1285,19 +1286,19 @@
         { id:"sandwich_clasico", nombre:"Sandwich Clasico", precio:70, desc:"Jamon de pavo, queso, aguacate, lechuga, jitomate, cebolla y chile, acompanado de papas a la francesa.", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT03mItSWOBagD2LDpHEhSGAtAeDBnz89RoNQ&s", categoria:"desayunos", custom:(item)=>openBreakfastWithOptions(item, null) },
         { id:"sandwich_3quesos", nombre:"Sandwich 3 Quesos", precio:70, desc:"3 quesos, tocino y capeado con huevo, acompanado de papas a la francesa.", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRpM041YrVkkCOG_R4LT90o6svW0hKaxqTheg&s", categoria:"desayunos", custom:(item)=>openBreakfastWithOptions(item, null) },
         { id:"big_sandwich", nombre:"Big Sandwich", precio:85, desc:"Huevo, queso, pechuga a la plancha en salsa Buffalo o BBQ, lechuga, pepino, jitomate, cebolla y aguacate, acompanado de papas a la francesa.", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQsrVPTIcvWod5CjSYPm3Uw22sDuvJY47PHZA&s", categoria:"desayunos", custom:(item)=>openBigSandwichModal(item) },
-        { id:"huevos_americanos", nombre:"Huevos Americanos", precio:85, desc:"2 huevos revueltos, 2 hot cakes, rollo de jamon y tocino.", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6-19Aceppe0cNWnnR8-5EgDAFOPOiWk_FMw&s", categoria:"desayunos", custom:(item)=>openBreakfastWithOptions(item, null) },
+        { id:"huevos_americanos", nombre:"Huevos Americanos", precio:95, desc:"2 huevos revueltos, 2 hot cakes, rollo de jamon y tocino.", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6-19Aceppe0cNWnnR8-5EgDAFOPOiWk_FMw&s", categoria:"desayunos", custom:(item)=>openBreakfastWithOptions(item, null) },
         { id:"burrito", nombre:"Burrito", precio:85, desc:"Frijoles, huevo, queso, acompanados con ensalada, aguacate y tocino.", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6mcRjh7mvs-3Uw0JIlibrMBsWbkTNnu1PPA&s", categoria:"desayunos", custom:(item)=>openBreakfastWithOptions(item, null) },
         { id:"burrito_arrachera", nombre:"Burrito Arrachera", precio:95, desc:"Arrachera, frijoles, queso, acompanados con ensalada y aguacate.", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-QAPAZroImTGUlhHsdZdZq_oi8csyKMV3sg&s", categoria:"desayunos", custom:(item)=>openBreakfastWithOptions(item, null) },
         { id:"burrito_pollo", nombre:"Burrito Pollo", precio:95, desc:"Pollo a la plancha, frijoles, queso, acompanados con ensalada y aguacate.", img:"https://i.ytimg.com/vi/H8P6Lcy1cPE/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLDivcvPa8a9wMdXsICMWjS1PCPvTA", categoria:"desayunos", custom:(item)=>openBreakfastWithOptions(item, null) },
         { id:"chilaquiles_verdes", nombre:"Chilaquiles Especiales (Verdes)", precio:95, desc:"Bien cargados, Elige tu Proteina, Banados en Frijoles Enchipotlados, Gratinados con Queso, Crema, Con aguacate, Cebolla y Cilantro", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEBrsgxWvOgKx3HLjJhKv07a0rv_7_QqQOsg&s", categoria:"desayunos", custom:(item)=>openChilaquilesWithOptions(item, true) },
         { id:"chilaquiles_rojos", nombre:"Chilaquiles Especiales (Rojos)", precio:95, desc:"Bien cargados, Elige tu Proteina, Banados en Frijoles Enchipotlados, Gratinados con Queso, Crema, Con aguacate, Cebolla y Cilantro", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEBrsgxWvOgKx3HLjJhKv07a0rv_7_QqQOsg&s", categoria:"desayunos", custom:(item)=>openChilaquilesWithOptions(item, false) },
-        { id:"huevos_gusto", nombre:"Huevos al Gusto", precio:65, desc:"Elige tu estilo, acompanados con frijoles en chipotle, una rebanada de queso panela, salsa y tortillas.", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5XN3JJB8lJKrTDkLJEpiLd1IL_FlE0xEKSQ&s", categoria:"desayunos", custom:(item)=>openHuevosModal(item) },
+        { id:"huevos_gusto", nombre:"Huevos al Gusto", precio:75, desc:"Elige tu estilo, acompanados con frijoles en chipotle, una rebanada de queso panela, salsa y tortillas.", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5XN3JJB8lJKrTDkLJEpiLd1IL_FlE0xEKSQ&s", categoria:"desayunos", custom:(item)=>openHuevosModal(item) },
         { id:"coctel_tropical", nombre:"Coctel de Frutas Tropical", precio:50, desc:"Melon, papaya, manzana, fresas - Elige topping", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZ_lT_0skxR0WBLqUkRmMBmgOjnlHl5SGjlQ&s", categoria:"desayunos", custom:(item)=>openSimpleModal(item) },
         { id:"coctel_fresco", nombre:"Coctel de Frutas Fresco", precio:50, desc:"Sandia, pina, jicama, pepino - Elige sazon", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTtFUOZe8j8mTgBkgVuytR_SW4Hy4Iv3xBzw&s", categoria:"desayunos", custom:(item)=>openSimpleModal(item) },
         { id:"menudo", nombre:"Menudo, Solo Domingos (Por Litro)", precio:120, desc:"Solo domingos, acompanado de tortillas.", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXOT-6-I-mP9Vtvo7YrX_ZHuWE3uF2Gyu6mw&s", categoria:"desayunos", custom:(item)=>openSimpleModal(item) },
         { id:"hot_cakes", nombre:"Hot Cakes con Fruta", precio:65, desc:"3 hot cakes con platano, fresas y mermelada de frutos rojos", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSVShdhlDtLaiIMkd20FXTV8TIfnuSxJwqkSw&s", categoria:"desayunos", custom:(item)=>openSimpleModal(item) },
         
-        // PASTAS
+        // PASTAS (PRECIOS CORREGIDOS)
         { id:"pasta_poblano", nombre:"Pasta Poblano", precio:89, desc:"Pasta en crema de poblano - Elige proteina extra", img:"https://cocinamia.com.mx/wp-content/uploads/2020/02/c-02-1100x500.png", categoria:"pastas", custom:(item)=>openPastaModal(item, "poblano") },
         { id:"pasta_chipotle", nombre:"Pasta Chipotle", precio:79, desc:"Pasta en crema de chipotle - Elige proteina extra", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTthI5vpI7MX0zmkV7gGwlqwcFAMB-nPN5r7A&s", categoria:"pastas", custom:(item)=>openPastaModal(item, "chipotle") },
         { id:"pasta_elote", nombre:"Pasta Elote", precio:79, desc:"Pasta en crema de elote - Elige proteina extra", img:"https://editorialtelevisa.brightspotcdn.com/wp-content/uploads/2021/02/pasta-con-crema-de-elote-y-poblano.jpg", categoria:"pastas", custom:(item)=>openPastaModal(item, "elote") },
