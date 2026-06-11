@@ -431,7 +431,7 @@
         }
         
         // Bebida caliente extra
-        const noDrinkItems = ["menudo", "coctel_tropical", "coctel_fresco", "hot_cakes"];
+        const noDrinkItems = ["menudo", "coctel_desayuno", "coctel_fresco", "hot_cakes"];
         if (!noDrinkItems.includes(baseItem.id)) {
             innerHtml += `<div class="option-group" style="margin-top:16px; border-top:0.5px solid #2a2a2a; padding-top:16px;">
                 <label class="option-label">Agregar bebida caliente (+$25)</label>
@@ -1293,8 +1293,8 @@
         { id:"chilaquiles_verdes", nombre:"Chilaquiles Especiales (Verdes)", precio:95, desc:"Bien cargados, Elige tu Proteina, Banados en Frijoles Enchipotlados, Gratinados con Queso, Crema, Con aguacate, Cebolla y Cilantro", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEBrsgxWvOgKx3HLjJhKv07a0rv_7_QqQOsg&s", categoria:"desayunos", custom:(item)=>openChilaquilesWithOptions(item, true) },
         { id:"chilaquiles_rojos", nombre:"Chilaquiles Especiales (Rojos)", precio:95, desc:"Bien cargados, Elige tu Proteina, Banados en Frijoles Enchipotlados, Gratinados con Queso, Crema, Con aguacate, Cebolla y Cilantro", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEBrsgxWvOgKx3HLjJhKv07a0rv_7_QqQOsg&s", categoria:"desayunos", custom:(item)=>openChilaquilesWithOptions(item, false) },
         { id:"huevos_gusto", nombre:"Huevos al Gusto", precio:75, desc:"Elige tu estilo, acompanados con frijoles en chipotle, una rebanada de queso panela, salsa y tortillas.", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5XN3JJB8lJKrTDkLJEpiLd1IL_FlE0xEKSQ&s", categoria:"desayunos", custom:(item)=>openHuevosModal(item) },
-        { id:"coctel_tropical", nombre:"Coctel de Frutas Tropical", precio:50, desc:"Melon, papaya, manzana, fresas - Elige topping", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZ_lT_0skxR0WBLqUkRmMBmgOjnlHl5SGjlQ&s", categoria:"desayunos", custom:(item)=>openSimpleModal(item) },
-        { id:"coctel_fresco", nombre:"Coctel de Frutas Fresco", precio:50, desc:"Sandia, pina, jicama, pepino - Elige sazon", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTtFUOZe8j8mTgBkgVuytR_SW4Hy4Iv3xBzw&s", categoria:"desayunos", custom:(item)=>openSimpleModal(item) },
+        { id:"coctel_desayuno", nombre:"Coctel Desayuno", precio:50, desc:"Melon, papaya, manzana, fresas - Elige topping", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZ_lT_0skxR0WBLqUkRmMBmgOjnlHl5SGjlQ&s", categoria:"desayunos", custom:(item)=>openCoctelDesayunoModal(item) }, // MODIFICADO
+        { id:"coctel_fresco", nombre:"Coctel Fresco", precio:50, desc:"Sandia, pina, jicama, pepino - Elige sazon", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTtFUOZe8j8mTgBkgVuytR_SW4Hy4Iv3xBzw&s", categoria:"desayunos", custom:(item)=>openCoctelFrescoModal(item) }, // MODIFICADO
         { id:"menudo", nombre:"Menudo, Solo Domingos (Por Litro)", precio:120, desc:"Solo domingos, acompanado de tortillas.", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXOT-6-I-mP9Vtvo7YrX_ZHuWE3uF2Gyu6mw&s", categoria:"desayunos", custom:(item)=>openSimpleModal(item) },
         { id:"hot_cakes", nombre:"Hot Cakes con Fruta", precio:65, desc:"3 hot cakes con platano, fresas y mermelada de frutos rojos", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSVShdhlDtLaiIMkd20FXTV8TIfnuSxJwqkSw&s", categoria:"desayunos", custom:(item)=>openSimpleModal(item) },
         
@@ -1349,6 +1349,78 @@
         { id:"capuchino", nombre:"Capuchino", precio:45, desc:"Selector de azucar", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCQTSBcnRTdy9niJl7sn9cWHK9iIg-VULZyQ&s", categoria:"bebidas", custom:(item)=>openCapuchinoModal() },
         { id:"chocolate_caliente", nombre:"Chocolate Caliente", precio:35, desc:"Selector de leche entera o deslactosada", img:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqS2os8EZp3Q8ZyQjs3Vf6ZhPQ2v-WAWE0aQ&s", categoria:"bebidas", custom:(item)=>openChocolateCalienteModal() }
     ];
+
+    // NUEVA FUNCION PARA COCTEL DESAYUNO (CON YOGURT Y GRANOLA O MIEL O SOLO)
+    function openCoctelDesayunoModal(baseItem) {
+        let selectedOption = "solo"; // solo, yogurt, miel
+        let descripcionBase = baseItem.desc || "";
+        const modalContent = document.getElementById("customizeModalContent");
+        let innerHtml = `<div class="modal-header"><h2>${baseItem.nombre}</h2><button class="close-modal" id="closeCustomModal">&times;</button></div>`;
+        innerHtml += `<div class="option-group"><label class="option-label">Elige tu topping</label><div class="radio-group">
+            <label><input type="radio" name="topping" value="solo" checked> Solo</label>
+            <label><input type="radio" name="topping" value="yogurt"> Con Yogurt y Granola</label>
+            <label><input type="radio" name="topping" value="miel"> Con Miel</label>
+        </div></div>`;
+        innerHtml += `<div class="price-preview" id="pricePreview">Total: $${baseItem.precio}</div><button class="btn-confirm" id="confirmBtn"><i class="fas fa-check"></i> Agregar al carrito</button>`;
+        modalContent.innerHTML = innerHtml;
+        document.getElementById("customizeModal").classList.add("active");
+        document.getElementById("closeCustomModal").onclick = () => document.getElementById("customizeModal").classList.remove("active");
+        
+        const priceSpan = document.getElementById("pricePreview");
+        let basePrice = baseItem.precio;
+        
+        const radioToppings = document.querySelectorAll('input[name="topping"]');
+        radioToppings.forEach(r => r.onchange = () => { selectedOption = r.value; });
+        
+        document.getElementById("confirmBtn").onclick = () => {
+            let finalName = baseItem.nombre;
+            if (selectedOption === "yogurt") finalName += " con Yogurt y Granola";
+            else if (selectedOption === "miel") finalName += " con Miel";
+            else finalName += " Solo";
+            
+            if (descripcionBase && !finalName.includes(descripcionBase.substring(0,30))) {
+                finalName = finalName + " - " + descripcionBase;
+            }
+            addToCartCustom({ id: baseItem.id + "_" + Date.now(), nombre: finalName, precio: basePrice, cantidad: 1 });
+            document.getElementById("customizeModal").classList.remove("active");
+        };
+    }
+
+    // NUEVA FUNCION PARA COCTEL FRESCO (CON CHAMOY, CON TAJIN O SOLO)
+    function openCoctelFrescoModal(baseItem) {
+        let selectedOption = "solo"; // solo, chamoy, tajin
+        let descripcionBase = baseItem.desc || "";
+        const modalContent = document.getElementById("customizeModalContent");
+        let innerHtml = `<div class="modal-header"><h2>${baseItem.nombre}</h2><button class="close-modal" id="closeCustomModal">&times;</button></div>`;
+        innerHtml += `<div class="option-group"><label class="option-label">Elige tu sazon</label><div class="radio-group">
+            <label><input type="radio" name="sazon" value="solo" checked> Solo</label>
+            <label><input type="radio" name="sazon" value="chamoy"> Con Chamoy</label>
+            <label><input type="radio" name="sazon" value="tajin"> Con Tajín</label>
+        </div></div>`;
+        innerHtml += `<div class="price-preview" id="pricePreview">Total: $${baseItem.precio}</div><button class="btn-confirm" id="confirmBtn"><i class="fas fa-check"></i> Agregar al carrito</button>`;
+        modalContent.innerHTML = innerHtml;
+        document.getElementById("customizeModal").classList.add("active");
+        document.getElementById("closeCustomModal").onclick = () => document.getElementById("customizeModal").classList.remove("active");
+        
+        const priceSpan = document.getElementById("pricePreview");
+        let basePrice = baseItem.precio;
+        
+        const radioSazones = document.querySelectorAll('input[name="sazon"]');
+        radioSazones.forEach(r => r.onchange = () => { selectedOption = r.value; });
+        
+        document.getElementById("confirmBtn").onclick = () => {
+            let finalName = baseItem.nombre;
+            if (selectedOption === "chamoy") finalName += " con Chamoy";
+            else if (selectedOption === "tajin") finalName += " con Tajín";
+            else finalName += " Solo";
+            
+            if (descripcionBase && !finalName.includes(descripcionBase.substring(0,30))) {
+                finalName = finalName + " - " + descripcionBase;
+            }
+            addToCartCustom({ id: baseItem.id + "_" + Date.now(), nombre: finalName, precio: basePrice, cantidad: 1 });
+            document.getElementById("customizeModal").classList.remove("active");
+        };
+    }
 
     function renderFullMenu(){
         const grids={clasicos:document.getElementById("gridClasicos"),desayunos:document.getElementById("gridDesayunos"),pastas:document.getElementById("gridPastas"),mariscos:document.getElementById("gridMariscos"),tacos:document.getElementById("gridTacos"),tortas:document.getElementById("gridTortas"),ensaladas:document.getElementById("gridEnsaladas"),postres:document.getElementById("gridPostres"),otros:document.getElementById("gridOtros"),bebidas:document.getElementById("gridBebidas")};
