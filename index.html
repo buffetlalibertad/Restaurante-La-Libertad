@@ -1061,7 +1061,7 @@
                 <label><input type="radio" name="salsa" value="buffalo" checked> Salsa Buffalo</label>
                 <label><input type="radio" name="salsa" value="bbq"> Salsa BBQ</label>
             </div></div>`,
-            getCustomization: () => ({ name: `Big Sandwich (Salsa ${salsaMap[selectedSalsa]})`, price: 85 }),
+            getCustomization: () => ({ name: `Big Sandwich (Salsa ${salsaMap[selectedSalsa]})`, price: 105 }),
             init: () => { document.querySelectorAll('input[name="salsa"]').forEach(r => r.onchange = () => { selectedSalsa = r.value; }); }
         });
     }
