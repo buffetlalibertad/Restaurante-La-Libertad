@@ -880,14 +880,14 @@
         updatePrice();
     }
 
-    // Huevos al gusto con estilo (PRECIO ACTUALIZADO A 75)
+    // Huevos al gusto con estilo (PRECIO ACTUALIZADO A 85)
     function openHuevosModal(baseItem) {
         let selectedEstilo = "estrellados";
         let estiloMap = { estrellados: "Estrellados", revueltos: "Revueltos", mexicanos: "A la Mexicana", con_jamon: "Con Jamon", rancheros: "Rancheros" };
         // Reutilizo la función de desayunos, pero sobrescribiendo el precio a 85
         openBreakfastWithOptions({...baseItem, precio: 85}, {
             html: `<div class="option-group"><label class="option-label">Elige tu estilo</label><div class="radio-group"><label><input type="radio" name="estilo" value="estrellados" checked> Estrellados</label><label><input type="radio" name="estilo" value="revueltos"> Revueltos</label><label><input type="radio" name="estilo" value="mexicanos"> A la Mexicana</label><label><input type="radio" name="estilo" value="con_jamon"> Con Jamon</label><label><input type="radio" name="estilo" value="rancheros"> Rancheros</label></div></div>`,
-            getCustomization: () => ({ name: `Huevos ${estiloMap[selectedEstilo]}`, price: 75 }),
+            getCustomization: () => ({ name: `Huevos ${estiloMap[selectedEstilo]}`, price: 85 }),
             init: () => { document.querySelectorAll('input[name="estilo"]').forEach(r => r.onchange = () => { selectedEstilo = r.value; }); }
         });
     }
