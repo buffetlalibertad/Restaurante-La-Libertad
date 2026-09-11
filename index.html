@@ -1742,7 +1742,7 @@
 
     <script>
         // ============================================================
-        // TODAS TUS FUNCIONES ORIGINALES COMPLETAMENTE INTACTAS
+        // TODAS FUNCIONES ORIGINALES 
         // ============================================================
 
         let cart = [];
@@ -2874,7 +2874,7 @@
 
         function openTacosModal() {
             const tacoCounts = { arrachera: 0, bistec: 0, chorizo: 0, campechano: 0 };
-            const precios = { arrachera: 20, bistec: 14, chorizo: 14, campechano: 15 };
+            const precios = { arrachera: 20, bistec: 15, chorizo: 15, campechano: 15 };
             const nombres = { arrachera: "Arrachera", bistec: "Bistec", chorizo: "Chorizo", campechano: "Campechano" };
             let totalTacos = 0;
 
@@ -2921,8 +2921,8 @@
                     </div>
                     <div style="margin-bottom: 16px; font-size: 0.85rem; color: var(--smoke);">Acompañados aparte de cebolla, cilantro y limón. Elige cuántos de cada tipo quieres:</div>
                     <div class="taco-item"><div class="taco-header"><span class="taco-nombre">Arrachera</span><span class="taco-precio">$20 c/u</span></div><div class="taco-counter"><button class="btn-cambiar-cantidad" data-tipo="arrachera" data-cambio="-1">−</button><span class="count">${tacoCounts.arrachera}</span><button class="btn-cambiar-cantidad" data-tipo="arrachera" data-cambio="1">+</button></div></div>
-                    <div class="taco-item"><div class="taco-header"><span class="taco-nombre">Bistec</span><span class="taco-precio">$14 c/u</span></div><div class="taco-counter"><button class="btn-cambiar-cantidad" data-tipo="bistec" data-cambio="-1">−</button><span class="count">${tacoCounts.bistec}</span><button class="btn-cambiar-cantidad" data-tipo="bistec" data-cambio="1">+</button></div></div>
-                    <div class="taco-item"><div class="taco-header"><span class="taco-nombre">Chorizo</span><span class="taco-precio">$14 c/u</span></div><div class="taco-counter"><button class="btn-cambiar-cantidad" data-tipo="chorizo" data-cambio="-1">−</button><span class="count">${tacoCounts.chorizo}</span><button class="btn-cambiar-cantidad" data-tipo="chorizo" data-cambio="1">+</button></div></div>
+                    <div class="taco-item"><div class="taco-header"><span class="taco-nombre">Bistec</span><span class="taco-precio">$15 c/u</span></div><div class="taco-counter"><button class="btn-cambiar-cantidad" data-tipo="bistec" data-cambio="-1">−</button><span class="count">${tacoCounts.bistec}</span><button class="btn-cambiar-cantidad" data-tipo="bistec" data-cambio="1">+</button></div></div>
+                    <div class="taco-item"><div class="taco-header"><span class="taco-nombre">Chorizo</span><span class="taco-precio">$15 c/u</span></div><div class="taco-counter"><button class="btn-cambiar-cantidad" data-tipo="chorizo" data-cambio="-1">−</button><span class="count">${tacoCounts.chorizo}</span><button class="btn-cambiar-cantidad" data-tipo="chorizo" data-cambio="1">+</button></div></div>
                     <div class="taco-item"><div class="taco-header"><span class="taco-nombre">Campechano</span><span class="taco-precio">$15 c/u</span></div><div class="taco-counter"><button class="btn-cambiar-cantidad" data-tipo="campechano" data-cambio="-1">−</button><span class="count">${tacoCounts.campechano}</span><button class="btn-cambiar-cantidad" data-tipo="campechano" data-cambio="1">+</button></div></div>
                     <div style="margin-top: 24px;"><label class="option-label">Resumen de tu pedido</label></div>
                     <div id="tacosListaContainer" class="tacos-lista">${resumenHtml}</div>
@@ -3055,7 +3055,7 @@
             { id: "milanesa_napolitana", nombre: "Milanesa Napolitana", precio: 135, desc: "Acompañada de pasta, ensalada y pan de ajo.", img: "https://preview.redd.it/whats-the-most-you-would-reasonably-pay-for-a-chicken-v0-ws6uw2nkz6e91.jpg?width=640&crop=smart&auto=webp&s=c776bbb46ad90cfe30682b7a98c9a70bd99d36d6", categoria: "clasicos", custom: (item) => openWithPapasOption(item) },
             { id: "pechuga_hawaiana", nombre: "Pechuga Hawiana", precio: 135, desc: "Acompañada de papas a la francesa, ensalada y pan de ajo.", img: "https://azkatl.com/wp-content/uploads/2024/01/pechuga-empanizada-hawaiana-azkatl.jpg", categoria: "clasicos", custom: (item) => openSimpleModal(item) },
             { id: "fajitas_res", nombre: "Fajitas de Res", precio: 159, desc: "Con guacamole, frijoles, salsa y totopos", img: "https://jetextramar.com/wp-content/uploads/2021/07/empresa-de-alimentos-receta-de-guacamole.jpg", categoria: "clasicos", custom: (item) => openWithPapasOption(item) },
-            { id: "papas_alhorno", nombre: "Papas al Horno", precio: 119, desc: "Gratinadas con queso, y con galletas saladas", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQggF8LfUl7U0eUUBnWe225Ilx0A-XISUFSJQ&s", categoria: "clasicos", custom: (item) => openPapasRellenoModal(item) },
+            { id: "papas_alhorno", nombre: "Papas al Horno", precio: 119, desc: "Gratinadas con queso, y con pan de ajo", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQggF8LfUl7U0eUUBnWe225Ilx0A-XISUFSJQ&s", categoria: "clasicos", custom: (item) => openPapasRellenoModal(item) },
             { id: "pollo_oriental", nombre: "Pollo Tipo Oriental", precio: 110, desc: "Con vegetales y pan con ajo", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgcDfLUdzL9XLazMpjU_ilAC6WcOvp96SJjA&s", categoria: "clasicos", custom: (item) => openWithPapasOption(item) },
             { id: "filete_pescado", nombre: "Filete de Pescado Empapelado con Camaron", precio: 145, desc: "Pescado en papillote con camarones, gratinado con queso, morron, cebolla y jalapeno, acompanado con arroz blanco y pan de ajo.", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUtmcNcgxHKt-omWj5nY83cSGAQW7E_CWbuw&s", categoria: "clasicos", custom: (item) => openWithPapasOption(item) },
             { id: "filete_empanizado", nombre: "Filete Empanizado", precio: 139, desc: "Acompanado de ensalada, arroz y pan con ajo.", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZv5kGbXJgveauBmsGoxzzUuDHwp7evPsdJg&s", categoria: "clasicos", custom: (item) => openWithPapasOption(item) },
@@ -3082,7 +3082,7 @@
             { id: "sandwich_3quesos", nombre: "Sandwich 3 Quesos", precio: 70, desc: "3 quesos, tocino y capeado con huevo, acompanado de papas a la francesa.", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRpM041YrVkkCOG_R4LT90o6svW0hKaxqTheg&s", categoria: "desayunos", custom: (item) => openBreakfastWithOptions(item, null) },
             { id: "big_sandwich", nombre: "Big Sandwich", precio: 105, desc: "Huevo, queso, pechuga a la plancha en salsa Buffalo o BBQ, lechuga, pepino, jitomate, cebolla y aguacate, acompanado de papas a la francesa.", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQsrVPTIcvWod5CjSYPm3Uw22sDuvJY47PHZA&s", categoria: "desayunos", custom: (item) => openBigSandwichModal(item) },
             { id: "huevos_americanos", nombre: "Huevos Americanos", precio: 110, desc: "2 huevos revueltos, 2 hot cakes, rollo de jamon y tocino.", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6-19Aceppe0cNWnnR8-5EgDAFOPOiWk_FMw&s", categoria: "desayunos", custom: (item) => openBreakfastWithOptions(item, null) },
-            { id: "burrito", nombre: "Burrito", precio: 85, desc: "Frijoles, huevo, queso, acompanados con ensalada, aguacate y tocino.", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6mcRjh7mvs-3Uw0JIlibrMBsWbkTNnu1PPA&s", categoria: "desayunos", custom: (item) => openBreakfastWithOptions(item, null) },
+            { id: "burrito", nombre: "Burrito", precio: 95, desc: "Frijoles, huevo, queso, acompanados con ensalada, aguacate y tocino.", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6mcRjh7mvs-3Uw0JIlibrMBsWbkTNnu1PPA&s", categoria: "desayunos", custom: (item) => openBreakfastWithOptions(item, null) },
             { id: "burrito_arrachera", nombre: "Burrito Arrachera", precio: 95, desc: "Arrachera, frijoles, queso, acompanados con ensalada y aguacate.", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-QAPAZroImTGUlhHsdZdZq_oi8csyKMV3sg&s", categoria: "desayunos", custom: (item) => openBreakfastWithOptions(item, null) },
             { id: "burrito_pollo", nombre: "Burrito Pollo", precio: 95, desc: "Pollo a la plancha, frijoles, queso, acompanados con ensalada y aguacate.", img: "https://i.ytimg.com/vi/H8P6Lcy1cPE/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLDivcvPa8a9wMdXsICMWjS1PCPvTA", categoria: "desayunos", custom: (item) => openBreakfastWithOptions(item, null) },
             { id: "chilaquiles_verdes", nombre: "Chilaquiles Especiales (Verdes)", precio: 95, desc: "Bien cargados, Elige tu Proteina, Banados en Frijoles Enchipotlados, Gratinados con Queso, Crema, Con aguacate, Cebolla y Cilantro", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEBrsgxWvOgKx3HLjJhKv07a0rv_7_QqQOsg&s", categoria: "desayunos", custom: (item) => openChilaquilesWithOptions(item, true) },
