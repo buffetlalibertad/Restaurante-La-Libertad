@@ -2364,6 +2364,36 @@
             };
         }
 
+        // NUEVA FUNCIÓN PARA BIG TURTLE (solo papas extra por $30)
+        function openBigTurtleModal(baseItem) {
+            let hasExtraPapas = false;
+            let descripcionBase = baseItem.desc || "";
+            const modalContent = document.getElementById("customizeModalContent");
+            let innerHtml = `<div class="modal-header"><h2>${baseItem.nombre}</h2><button class="close-modal" id="closeCustomModal">&times;</button></div>`;
+            innerHtml += `<div class="option-group"><label class="option-label">Agregar papas extra</label><div class="radio-group"><label><input type="radio" name="papas" value="no" checked> Sin papas</label><label><input type="radio" name="papas" value="si"> Papas extra (+$30)</label></div></div>`;
+            innerHtml += `<div class="price-preview" id="pricePreview">Total: $${baseItem.precio}</div><button class="btn-confirm" id="confirmBtn"><i class="fas fa-check"></i> Agregar al carrito</button>`;
+            modalContent.innerHTML = innerHtml;
+            document.getElementById("customizeModal").classList.add("active");
+            document.getElementById("closeCustomModal").onclick = () => document.getElementById("customizeModal").classList.remove("active");
+
+            let basePrice = baseItem.precio;
+            const priceSpan = document.getElementById("pricePreview");
+            const papasRadios = document.querySelectorAll('input[name="papas"]');
+
+            papasRadios.forEach(r => r.onchange = () => { hasExtraPapas = r.value === "si";
+                priceSpan.innerText = `Total: $${basePrice + (hasExtraPapas ? 30 : 0)}`; });
+
+            document.getElementById("confirmBtn").onclick = () => {
+                let finalPrice = basePrice + (hasExtraPapas ? 30 : 0);
+                let finalName = baseItem.nombre + (hasExtraPapas ? " + Papas Extra" : "");
+                if (descripcionBase && !finalName.includes(descripcionBase.substring(0, 30))) {
+                    finalName = finalName + " - " + descripcionBase;
+                }
+                addToCartCustom({ id: baseItem.id + "_" + Date.now(), nombre: finalName, precio: finalPrice, cantidad: 1 });
+                document.getElementById("customizeModal").classList.remove("active");
+            };
+        }
+
         function openQuesadillaArracheraModal(baseItem) {
             let hasExtraPapas = false;
             let descripcionBase = baseItem.desc || "";
@@ -3072,6 +3102,9 @@
             { id: "enchiladas_suizas", nombre: "Enchiladas Suizas", precio: 85, desc: "4 enchiladas rellenas de pollo y queso, gratinadas con crema y salsa verde, acompanadas de ensalada", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMcpJC4dhxcI361dSYcZ-HhcbMpDEv-c-Lzw&s", categoria: "clasicos", custom: (item) => openSimpleModal(item) },
             { id: "enchiladas_rojas", nombre: "Enchiladas Rojas Mexicanas", precio: 50, desc: "5 enchiladas rojas, con lechuga, chile en vinagre y papas", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSYzxfbqzlPzFmRoRoWXZpLolq_Q7btqxEyyA&s", categoria: "clasicos", custom: (item) => openSimpleModal(item) },
             { id: "hamburguesa", nombre: "Hamburguesa", precio: 79, desc: "Hamburguesa de pollo.", img: "https://comedera.com/wp-content/uploads/sites/9/2023/07/Hamburguesa-de-pollo-picante.jpg", categoria: "clasicos", custom: (item) => openHamburguesaModal(item) },
+            
+            // ===== NUEVA HAMBURGUESA BIG TURTLE =====
+            { id: "big_turtle", nombre: "Big Turtle", precio: 90, desc: "Doble pollo a la plancha, guacamole, tocino, cebolla caramelizada, BBQ, queso amarillo, asadero y pepinillos.", img: "https://www.lacrianza.cl/wp-content/uploads/2023/05/mayo03m.jpg", categoria: "clasicos", custom: (item) => openBigTurtleModal(item) },
             
             { id: "cordon_bleu", nombre: "Cordon Bleu", precio: 169, desc: "Pechuga de pollo empanizada, enrollada y rellena de jamon con queso tipo manchego, acompanada de pan con ajo, una papa rellena, ensalada de lechuga, morron, cebolla, zanahoria y ligeramente banada en crema de chipotle.", img: "https://d1uz88p17r663j.cloudfront.net/original/d6da8de8b1f6b46563028fd60ec835ff_PECHUGA_CORDON_BLEU_CON_SALSA_3_CHILES_-_EMPANIZADO_POLLO.jpg", categoria: "clasicos", custom: (item) => openWithPapasOption(item) },
             { id: "fajitas_pollo_tocino", nombre: "Fajitas de Pollo con Tocino", precio: 159, desc: "Pure y ensalada, pan de ajo.", img: "https://images.ctfassets.net/ttw7uwgviuml/4hjAMvbSdH4lVuMYXwimau/87651fe4f40cfe5444c603f54627a8c2/fajitas-estilo-oriental.jpg", categoria: "clasicos", custom: (item) => openWithPapasOption(item) },
