@@ -2458,14 +2458,19 @@
         }
 
         function openTortaModal(baseItem) {
-            let selectedTorta = "bistec";
+            let selectedTorta = "milanesa_pollo";
             let hasExtraPapas = false;
-            let tortaMap = { bistec: "Bistec", milanesa_pollo: "Milanesa de pollo", choriqueso: "Choriqueso", jamon: "Jamon", salchichas: "Salchichas", campechana: "Campechana", cubana: "Cubana" };
-            let tortaPrecios = { bistec: 55, milanesa_pollo: 55, choriqueso: 55, jamon: 45, salchichas: 55, campechana: 55, cubana: 65 };
+            let tortaMap = { milanesa_pollo: "Milanesa de pollo", jamon: "Jamon", salchichas: "Salchichas", cubana: "Cubana" };
+            let tortaPrecios = { milanesa_pollo: 55, jamon: 45, salchichas: 55, cubana: 65 };
             let descripcionBase = baseItem.desc || "";
             const modalContent = document.getElementById("customizeModalContent");
             let innerHtml = `<div class="modal-header"><h2>${baseItem.nombre}</h2><button class="close-modal" id="closeCustomModal">&times;</button></div>`;
-            innerHtml += `<div class="option-group"><label class="option-label">Elige tu torta</label><div class="radio-group"><label><input type="radio" name="torta" value="bistec" checked> Bistec ($55) </label><label><input type="radio" name="torta" value="milanesa_pollo"> Milanesa de Pollo ($55)</label><label><input type="radio" name="torta" value="choriqueso"> Choriqueso ($55)</label><label><input type="radio" name="torta" value="jamon"> Jamon ($45)</label><label><input type="radio" name="torta" value="salchichas"> Salchichas ($55)</label><label><input type="radio" name="torta" value="campechana"> Campechana ($55)</label><label><input type="radio" name="torta" value="cubana"> Cubana ($65)</label></div></div>`;
+            innerHtml += `<div class="option-group"><label class="option-label">Elige tu torta</label><div class="radio-group">
+                <label><input type="radio" name="torta" value="milanesa_pollo" checked> Milanesa de Pollo ($55)</label>
+                <label><input type="radio" name="torta" value="jamon"> Jamon ($45)</label>
+                <label><input type="radio" name="torta" value="salchichas"> Salchichas ($55)</label>
+                <label><input type="radio" name="torta" value="cubana"> Cubana ($65)</label>
+            </div></div>`;
             innerHtml += `<div class="option-group"><label class="option-label">Agregar papas extra</label><div class="radio-group"><label><input type="radio" name="papas" value="no" checked> Sin papas</label><label><input type="radio" name="papas" value="si"> Papas extra (+$30)</label></div></div>`;
             innerHtml += `<div class="price-preview" id="pricePreview">Total: $${tortaPrecios[selectedTorta]}</div><button class="btn-confirm" id="confirmBtn"><i class="fas fa-check"></i> Agregar al carrito</button>`;
             modalContent.innerHTML = innerHtml;
@@ -2903,9 +2908,9 @@
         }
 
         function openTacosModal() {
-            const tacoCounts = { arrachera: 0, bistec: 0, chorizo: 0, campechano: 0 };
-            const precios = { arrachera: 20, bistec: 15, chorizo: 15, campechano: 15 };
-            const nombres = { arrachera: "Arrachera", bistec: "Bistec", chorizo: "Chorizo", campechano: "Campechano" };
+            const tacoCounts = { arrachera: 0 };
+            const precios = { arrachera: 20 };
+            const nombres = { arrachera: "Arrachera" };
             let totalTacos = 0;
 
             const closeModal = () => { document.getElementById("customizeModal").classList.remove("active"); };
@@ -2951,9 +2956,13 @@
                     </div>
                     <div style="margin-bottom: 16px; font-size: 0.85rem; color: var(--smoke);">Acompañados aparte de cebolla, cilantro y limón. Elige cuántos de cada tipo quieres:</div>
                     <div class="taco-item"><div class="taco-header"><span class="taco-nombre">Arrachera</span><span class="taco-precio">$20 c/u</span></div><div class="taco-counter"><button class="btn-cambiar-cantidad" data-tipo="arrachera" data-cambio="-1">−</button><span class="count">${tacoCounts.arrachera}</span><button class="btn-cambiar-cantidad" data-tipo="arrachera" data-cambio="1">+</button></div></div>
-                    <div class="taco-item"><div class="taco-header"><span class="taco-nombre">Bistec</span><span class="taco-precio">$15 c/u</span></div><div class="taco-counter"><button class="btn-cambiar-cantidad" data-tipo="bistec" data-cambio="-1">−</button><span class="count">${tacoCounts.bistec}</span><button class="btn-cambiar-cantidad" data-tipo="bistec" data-cambio="1">+</button></div></div>
-                    <div class="taco-item"><div class="taco-header"><span class="taco-nombre">Chorizo</span><span class="taco-precio">$15 c/u</span></div><div class="taco-counter"><button class="btn-cambiar-cantidad" data-tipo="chorizo" data-cambio="-1">−</button><span class="count">${tacoCounts.chorizo}</span><button class="btn-cambiar-cantidad" data-tipo="chorizo" data-cambio="1">+</button></div></div>
-                    <div class="taco-item"><div class="taco-header"><span class="taco-nombre">Campechano</span><span class="taco-precio">$15 c/u</span></div><div class="taco-counter"><button class="btn-cambiar-cantidad" data-tipo="campechano" data-cambio="-1">−</button><span class="count">${tacoCounts.campechano}</span><button class="btn-cambiar-cantidad" data-tipo="campechano" data-cambio="1">+</button></div></div>
+                    <div class="option-group" style="margin-top:18px; border-top:0.5px solid var(--line); padding-top:16px;">
+                        <label class="option-label">Verdura</label>
+                        <div class="radio-group">
+                            <label><input type="radio" name="verdura" value="con" checked> Con verdura</label>
+                            <label><input type="radio" name="verdura" value="sin"> Sin verdura</label>
+                        </div>
+                    </div>
                     <div style="margin-top: 24px;"><label class="option-label">Resumen de tu pedido</label></div>
                     <div id="tacosListaContainer" class="tacos-lista">${resumenHtml}</div>
                     <div class="total-tacos" id="tacosTotalPrecio">Total: $${totalPrecio} (${totalTacos} taco${totalTacos !== 1 ? 's' : ''})</div>
@@ -2978,13 +2987,15 @@
                         alert("Agrega al menos un taco");
                         return;
                     }
+                    const verduraSeleccionada = document.querySelector('input[name="verdura"]:checked').value;
+                    const verduraTexto = verduraSeleccionada === "con" ? "Con verdura" : "Sin verdura";
                     let resumenTacos = [];
                     for (const [tipo, cantidad] of Object.entries(tacoCounts)) {
                         if (cantidad > 0) {
                             resumenTacos.push(`${cantidad} x ${nombres[tipo]}`);
                         }
                     }
-                    const nombreItem = `Tacos: ${resumenTacos.join(", ")}`;
+                    const nombreItem = `Tacos: ${resumenTacos.join(", ")} (${verduraTexto})`;
                     const totalPrecioFinal = Object.entries(tacoCounts).reduce((sum, [tipo, cant]) => sum + (cant * precios[tipo]), 0);
                     addToCartCustom({ id: "tacos_paquete_" + Date.now(), nombre: nombreItem, precio: totalPrecioFinal, cantidad: 1 });
                     closeModal();
