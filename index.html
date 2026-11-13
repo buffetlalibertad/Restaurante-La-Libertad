@@ -2461,7 +2461,7 @@
             let selectedTorta = "milanesa_pollo";
             let hasExtraPapas = false;
             let tortaMap = { milanesa_pollo: "Milanesa de pollo", jamon: "Jamon", salchichas: "Salchichas", cubana: "Cubana" };
-            let tortaPrecios = { milanesa_pollo: 55, jamon: 45, salchichas: 55, cubana: 65 };
+            let tortaPrecios = { milanesa_pollo: 55, jamon: 45, salchichas: 55, cubana: 79 };
             let descripcionBase = baseItem.desc || "";
             const modalContent = document.getElementById("customizeModalContent");
             let innerHtml = `<div class="modal-header"><h2>${baseItem.nombre}</h2><button class="close-modal" id="closeCustomModal">&times;</button></div>`;
@@ -2469,7 +2469,7 @@
                 <label><input type="radio" name="torta" value="milanesa_pollo" checked> Milanesa de Pollo ($55)</label>
                 <label><input type="radio" name="torta" value="jamon"> Jamon ($45)</label>
                 <label><input type="radio" name="torta" value="salchichas"> Salchichas ($55)</label>
-                <label><input type="radio" name="torta" value="cubana"> Cubana ($65)</label>
+                <label><input type="radio" name="torta" value="cubana"> Cubana ($79)</label>
             </div></div>`;
             innerHtml += `<div class="option-group"><label class="option-label">Agregar papas extra</label><div class="radio-group"><label><input type="radio" name="papas" value="no" checked> Sin papas</label><label><input type="radio" name="papas" value="si"> Papas extra (+$30)</label></div></div>`;
             innerHtml += `<div class="price-preview" id="pricePreview">Total: $${tortaPrecios[selectedTorta]}</div><button class="btn-confirm" id="confirmBtn"><i class="fas fa-check"></i> Agregar al carrito</button>`;
